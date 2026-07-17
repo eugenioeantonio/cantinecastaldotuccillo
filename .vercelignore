@@ -1,0 +1,6 @@
+# Dev-only artifacts — not needed at build or runtime (frames live in /public)
+.higgsfield
+backups
+legacy
+docs
+scripts

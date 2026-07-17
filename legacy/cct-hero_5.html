@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cantine Castaldo Tuccillo · Vini Vesuviani · Cinque Generazioni</title>
+<meta name="description" content="Cantine Castaldo Tuccillo — cinque generazioni di vino vesuviano a San Gennaro Vesuviano. Falanghina, Aglianico, Metodo Vesuviano e il raro Lammiccato." />
+<meta name="theme-color" content="#080405" />
+<link rel="canonical" href="https://www.cantinecastaldotuccillo.it/" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="it_IT" />
+<meta property="og:site_name" content="Cantine Castaldo Tuccillo" />
+<meta property="og:title" content="Cantine Castaldo Tuccillo — Il tempo diventa vino" />
+<meta property="og:description" content="Cinque generazioni di vino vesuviano. Falanghina, Aglianico, Metodo Vesuviano e il raro Lammiccato." />
+<meta property="og:url" content="https://www.cantinecastaldotuccillo.it/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Cantine Castaldo Tuccillo — Il tempo diventa vino" />
+<meta name="twitter:description" content="Cinque generazioni di vino vesuviano dal cuore del Vesuvio." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<!-- Three.js module map (loads in the user's browser) -->
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+<style>
+  :root{
+    --bordeaux:#4A0F1B; --wine-dark:#25070D; --carbon:#111111;
+    --ivory:#F3EFE6; --stone:#D4C7B5; --gold:#A88A56; --white-soft:#FAF8F3;
+    --serif:"Cormorant Garamond", Georgia, serif; --sans:"Inter", system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:#08040a;color:var(--ivory);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  body{overflow-x:hidden}
+  ::selection{background:var(--bordeaux);color:var(--ivory)}
+  a{color:inherit;text-decoration:none}
+
+  #preloader{position:fixed;inset:0;z-index:120;background:#08040a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;transition:opacity 1s ease .2s, visibility 1s ease .2s}
+  #preloader.done{opacity:0;visibility:hidden}
+  .pre-mark{font-family:var(--serif);font-size:clamp(22px,3vw,30px);letter-spacing:.55em;text-indent:.55em;opacity:0;animation:preIn 1.4s ease forwards}
+  .pre-line{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:preLine 1.8s ease forwards .4s}
+  @keyframes preIn{to{opacity:1}}@keyframes preLine{to{width:190px}}
+
+  header{position:fixed;top:0;left:0;width:100%;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:22px clamp(20px,5vw,64px);transition:background .6s ease,padding .6s ease,border-color .6s ease;border-bottom:1px solid rgba(168,138,86,0)}
+  header.solid{background:rgba(8,4,10,.72);backdrop-filter:blur(14px);padding:14px clamp(20px,5vw,64px);border-bottom:1px solid rgba(168,138,86,.18)}
+  .brand{font-family:var(--serif);line-height:.98}
+  .brand b{display:block;font-weight:600;font-size:16px;letter-spacing:.34em}
+  .brand span{display:block;font-family:var(--sans);font-weight:300;font-size:9px;letter-spacing:.5em;color:var(--stone);margin-top:4px}
+  nav{display:flex;align-items:center;gap:34px}
+  nav a{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ivory);opacity:.82;position:relative;padding:4px 0}
+  nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold);transition:width .4s ease}
+  nav a:hover{opacity:1}nav a:hover::after{width:100%}
+  .cart{display:flex;align-items:center;gap:8px;border:1px solid rgba(168,138,86,.4);border-radius:999px;padding:8px 16px;font-size:12px;letter-spacing:.14em}
+  .cart svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:1.4}
+  @media(max-width:880px){nav .nlink{display:none}}
+
+  .hero-scroll{position:relative;height:520vh}
+  .stage{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;background:radial-gradient(120% 90% at 50% 30%, #16090e 0%, #0a0508 52%, #060306 100%)}
+  #gl,#frames,#fallbackCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
+  #frames,#fallbackCanvas{display:none;z-index:1}
+  .loading-dot{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(212,199,181,.5);transition:opacity .8s ease}
+  .vignette{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 240px 80px rgba(0,0,0,.88);z-index:5}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.045;z-index:6;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+  .hero-logo{position:absolute;z-index:8;left:0;right:0;top:15vh;text-align:center}
+  .hero-logo .mk{font-family:var(--serif);font-size:clamp(16px,2vw,20px);letter-spacing:.5em;text-indent:.5em}
+  .hero-logo .sub{font-size:9px;letter-spacing:.46em;color:var(--stone);margin-top:8px}
+  .hero-copy{position:absolute;z-index:8;left:0;right:0;bottom:14vh;text-align:center;padding:0 24px}
+  .hero-copy .eyebrow{font-size:11px;letter-spacing:.44em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+  .hero-copy h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,7vw,86px);line-height:1.02}
+  .hero-copy h1 em{font-style:italic;color:var(--stone)}
+  .hero-copy p{margin-top:16px;font-weight:300;font-size:clamp(13px,1.4vw,16px);letter-spacing:.05em;color:rgba(243,239,230,.72)}
+  .cta-row{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{font-size:12px;letter-spacing:.18em;text-transform:uppercase;padding:15px 30px;border-radius:999px;transition:all .45s ease;border:1px solid transparent}
+  .btn-primary{background:var(--ivory);color:var(--wine-dark)}.btn-primary:hover{background:var(--gold);color:#1a0a10}
+  .btn-ghost{border-color:rgba(243,239,230,.4);color:var(--ivory)}.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+  .scroll-hint{position:absolute;z-index:8;left:0;right:0;bottom:30px;text-align:center}
+  .scroll-hint span{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(243,239,230,.6)}
+  .chev{margin:12px auto 0;width:18px;height:18px;border-right:1px solid var(--gold);border-bottom:1px solid var(--gold);transform:rotate(45deg);animation:bob 2s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.4}50%{transform:rotate(45deg) translate(4px,4px);opacity:1}}
+
+  .flood{position:absolute;left:0;bottom:0;width:100%;height:0;z-index:9;display:none;background:linear-gradient(180deg,#5a1122 0%,#4A0F1B 30%,#25070D 100%)}
+  .flood .wave{position:absolute;top:-56px;left:0;width:100%;height:58px;display:block}
+  .reveal{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;opacity:0;pointer-events:none}
+  .reveal .eyebrow{font-size:11px;letter-spacing:.44em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .reveal h2{font-family:var(--serif);font-weight:500;font-size:clamp(34px,6vw,74px);line-height:1.05}
+  .reveal h2 em{font-style:italic;color:var(--stone)}
+
+  .generazioni{background:linear-gradient(180deg,#25070D 0%,#1a0a10 60%,#120a10 100%);padding:14vh clamp(24px,7vw,120px) 18vh;position:relative}
+  .gen-intro{max-width:760px;margin:0 auto 12vh;text-align:center}
+  .gen-intro p{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.6vw,30px);line-height:1.5;color:rgba(243,239,230,.86)}
+  .timeline{max-width:900px;margin:0 auto;position:relative}
+  .timeline::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(168,138,86,.5),transparent);transform:translateX(-.5px)}
+  .tl-item{position:relative;width:50%;padding:26px 40px}
+  .tl-item:nth-child(odd){left:0;text-align:right}.tl-item:nth-child(even){left:50%;text-align:left}
+  .tl-item .dot{position:absolute;top:34px;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 5px rgba(168,138,86,.15)}
+  .tl-item:nth-child(odd) .dot{right:-4.5px}.tl-item:nth-child(even) .dot{left:-4.5px}
+  .tl-item .g{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold)}
+  .tl-item h3{font-family:var(--serif);font-weight:500;font-size:clamp(22px,2.4vw,30px);margin:8px 0 6px}
+  .tl-item p{font-weight:300;font-size:14px;line-height:1.7;color:rgba(243,239,230,.6)}
+  .tl-item .ph{font-size:12px;color:var(--stone);font-style:italic;opacity:.7}
+  @media(max-width:720px){
+    .timeline::before{left:8px}
+    .tl-item{width:100%;left:0!important;text-align:left!important;padding-left:34px;padding-right:0}
+    .tl-item .dot{left:4px!important;right:auto!important}
+  }
+  .demo-tag{position:fixed;left:14px;bottom:14px;z-index:100;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(243,239,230,.5);background:rgba(8,4,10,.6);border:1px solid rgba(168,138,86,.25);border-radius:999px;padding:7px 13px;backdrop-filter:blur(6px)}
+  .end-note{text-align:center;padding:8vh 24px 12vh;color:rgba(243,239,230,.4);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+
+  /* ===================== PREMIUM UPGRADE LAYER ===================== */
+  /* Accessibility helpers */
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip-link{position:fixed;left:16px;top:-60px;z-index:200;background:var(--ivory);color:var(--wine-dark);
+    padding:10px 18px;border-radius:999px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;transition:top .3s ease}
+  .skip-link:focus{top:16px}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+  a,button{-webkit-tap-highlight-color:transparent}
+
+  /* Scroll progress (thin gold thread) */
+  .scroll-progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:95;
+    background:linear-gradient(90deg,var(--bordeaux),var(--gold));box-shadow:0 0 12px rgba(168,138,86,.4);transition:width .1s linear}
+
+  /* Refined buttons — subtle shine + lift */
+  .btn{position:relative;overflow:hidden;will-change:transform}
+  .btn::before{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);transition:none}
+  .btn:hover{transform:translateY(-2px)}
+  .btn:hover::before{left:130%;transition:left .8s ease}
+  .btn-primary:hover{box-shadow:0 10px 30px -10px rgba(168,138,86,.5)}
+
+  /* Nav entrance + cart hover */
+  nav a{transition:opacity .4s ease,color .4s ease}
+  .cart{transition:border-color .4s ease,background .4s ease,transform .3s ease}
+  .cart:hover{border-color:var(--gold);background:rgba(168,138,86,.08);transform:translateY(-1px)}
+
+  /* Hamburger */
+  .menu-toggle{display:none;width:42px;height:42px;border:1px solid rgba(168,138,86,.4);border-radius:999px;
+    background:transparent;cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px;transition:border-color .4s ease}
+  .menu-toggle:hover{border-color:var(--gold)}
+  .menu-toggle span{display:block;width:16px;height:1.4px;background:var(--ivory);transition:transform .4s ease,opacity .3s ease}
+  .menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6.4px) rotate(45deg)}
+  .menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.4px) rotate(-45deg)}
+
+  /* Full-screen mobile menu */
+  .mobile-menu{position:fixed;inset:0;z-index:96;background:linear-gradient(180deg,#120a10 0%,#25070D 100%);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;padding:12vh 8vw;
+    opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .5s ease,visibility .5s ease,transform .5s ease}
+  .mobile-menu.open{opacity:1;visibility:visible;transform:translateY(0)}
+  .mobile-menu a{font-family:var(--serif);font-size:clamp(30px,9vw,52px);font-weight:500;color:var(--ivory);
+    letter-spacing:.01em;padding:8px 0;opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease,color .3s ease}
+  .mobile-menu.open a{opacity:1;transform:translateY(0)}
+  .mobile-menu a:nth-child(1){transition-delay:.12s}.mobile-menu a:nth-child(2){transition-delay:.18s}
+  .mobile-menu a:nth-child(3){transition-delay:.24s}.mobile-menu a:nth-child(4){transition-delay:.30s}
+  .mobile-menu a:nth-child(5){transition-delay:.36s}
+  .mobile-menu a:hover{color:var(--gold)}
+  .mobile-menu .mm-foot{margin-top:6vh;font-family:var(--sans);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--stone);opacity:.7;transition-delay:.42s}
+  @media(max-width:880px){ .menu-toggle{display:flex} }
+
+  /* Larger tap targets on mobile */
+  @media(max-width:720px){
+    .btn{padding:16px 26px}
+    .hero-copy{bottom:16vh}
+    .hero-copy h1{font-size:clamp(34px,10vw,60px)}
+  }
+
+  /* Respect reduced motion for the upgrade layer too */
+  @media(prefers-reduced-motion: reduce){
+    .btn,.btn::before,.cart,.mobile-menu,.mobile-menu a,.chev,.scroll-progress{transition:none!important;animation:none!important}
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Winery",
+  "name":"Cantine Castaldo Tuccillo",
+  "description":"Cantina vinicola con cinque generazioni di storia a San Gennaro Vesuviano. Produzione di vini campani IGP, Metodo Vesuviano e il tradizionale Lammiccato.",
+  "url":"https://www.cantinecastaldotuccillo.it/",
+  "telephone":"+39 329 1606790",
+  "email":"cantinecastaldotuccillo@gmail.com",
+  "priceRange":"€€",
+  "address":{
+    "@type":"PostalAddress",
+    "streetAddress":"Via Giugliani",
+    "addressLocality":"San Gennaro Vesuviano",
+    "addressRegion":"NA",
+    "addressCountry":"IT"
+  },
+  "areaServed":"Campania",
+  "openingHoursSpecification":[{
+    "@type":"OpeningHoursSpecification",
+    "dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    "opens":"08:30","closes":"13:30"
+  },{
+    "@type":"OpeningHoursSpecification",
+    "dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    "opens":"15:00","closes":"20:00"
+  }],
+  "sameAs":["https://www.facebook.com/cantinecastaldotuccillo"]
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Vai al contenuto</a>
+<div class="scroll-progress" id="scrollProgress" role="presentation"></div>
+
+<div id="preloader"><div class="pre-mark">CASTALDO&nbsp;TUCCILLO</div><div class="pre-line"></div></div>
+
+<header id="hdr">
+  <a class="brand" href="#" aria-label="Cantine Castaldo Tuccillo — home"><b>CASTALDO TUCCILLO</b><span>CANTINE · DAL VESUVIO</span></a>
+  <nav aria-label="Navigazione principale">
+    <a class="nlink" href="#">La Cantina</a><a class="nlink" href="#">Vini</a>
+    <a class="nlink" href="#">Metodo Vesuviano</a><a class="nlink" href="#">Esperienze</a>
+    <a class="cart" href="#" aria-label="Vai allo shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6 5 3H2"/></svg>Shop</a>
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Apri il menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+  <a href="#">La Cantina</a>
+  <a href="#">Vini</a>
+  <a href="#">Metodo Vesuviano</a>
+  <a href="#">Esperienze</a>
+  <a href="#">Shop</a>
+  <div class="mm-foot">San Gennaro Vesuviano · 329 1606790</div>
+</div>
+
+<main id="main">
+<section class="hero-scroll" id="heroScroll" aria-label="Introduzione — Il tempo diventa vino">
+  <div class="stage" id="stage">
+    <canvas id="gl"></canvas>
+    <canvas id="frames"></canvas>
+    <canvas id="fallbackCanvas"></canvas>
+    <div class="loading-dot" id="loadingDot">il calice prende forma…</div>
+
+    <div class="hero-logo" id="heroLogo">
+      <div class="mk">CASTALDO&nbsp;TUCCILLO</div>
+      <div class="sub">CINQUE GENERAZIONI · SAN GENNARO VESUVIANO</div>
+    </div>
+    <div class="hero-copy" id="heroCopy">
+      <div class="eyebrow">Cinque generazioni · Un territorio</div>
+      <h1>Il tempo <em>diventa</em> vino.</h1>
+      <p>Dal cuore del Vesuvio, una storia iniziata cinque generazioni fa.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#">Scopri la nostra storia</a>
+        <a class="btn btn-ghost" href="#">Esplora i vini</a>
+      </div>
+    </div>
+    <div class="flood" id="flood"><svg class="wave" viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,40 C240,4 480,4 720,30 C960,56 1200,56 1440,26 L1440,60 L0,60 Z" fill="#5a1122"/></svg></div>
+    <div class="reveal" id="reveal"><div class="eyebrow">La nostra storia</div><h2>Cinque generazioni,<br><em>una sola visione.</em></h2></div>
+    <div class="scroll-hint" id="hint"><span>Scorri per entrare nella nostra storia</span><div class="chev"></div></div>
+    <div class="vignette"></div><div class="grain"></div>
+  </div>
+</section>
+
+<section class="generazioni">
+  <div class="gen-intro" data-rise><p>Non produciamo soltanto vino. Custodiamo il tempo, il territorio e il lavoro di chi ci ha preceduto — una mano dopo l'altra, una vendemmia dopo l'altra.</p></div>
+  <div class="timeline">
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Prima generazione</div><h3>Le radici</h3><p class="ph">[Nome fondatore e anno da confermare]</p><p>Dove tutto è cominciato: la prima vite, la prima botte, la scelta di restare legati al Vesuvio.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Seconda generazione</div><h3>La cura</h3><p class="ph">[Nome e periodo da confermare]</p><p>La conoscenza del suolo lavico si affina e diventa metodo.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Terza generazione</div><h3>Il metodo</h3><p class="ph">[Nome e periodo da confermare]</p><p>Nasce e si custodisce il gesto del Lammiccato e del Metodo Vesuviano.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Quarta generazione</div><h3>Il riconoscimento</h3><p class="ph">[Nome e periodo da confermare]</p><p>La qualità varca i confini: dal Vesuvio verso l'Europa.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Quinta generazione</div><h3>Oggi</h3><p class="ph">[Nome e periodo da confermare]</p><p>La stessa terra, lo stesso rispetto — raccontati con un linguaggio nuovo.</p></div>
+  </div>
+</section>
+</main>
+
+<div class="end-note">— Fine anteprima Hero · le sezioni successive seguiranno la stessa direzione —</div>
+<div class="demo-tag">Demo Hero · calice 3D WebGL · Castaldo Tuccillo</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.14/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.js"></script>
+
+<!-- ============ GLASS: photoreal frame-sequence (primary) → 3D interim → poster ============ -->
+<script type="module">
+const _mobile = matchMedia('(max-width:768px)').matches;
+const SEQ = _mobile
+  ? { count:90,  path:i=>`frames/mobile/glass_${String(i).padStart(4,'0')}.webp` }
+  : { count:120, path:i=>`frames/desktop/glass_${String(i).padStart(4,'0')}.webp` };
+const _probe = src => new Promise(r=>{ const im=new Image(); im.onload=()=>r(im); im.onerror=()=>r(null); im.src=src; });
+const _first = await _probe(SEQ.path(0));
+
+if(_first){
+  // ===== PRIMARY: photoreal pre-rendered frame sequence (advertising-grade) =====
+  const canvas=document.getElementById('frames'); canvas.style.display='block';
+  document.getElementById('gl').style.display='none';
+  const ctx=canvas.getContext('2d'); const dpr=Math.min(devicePixelRatio,2);
+  const imgs=new Array(SEQ.count).fill(null); imgs[0]=_first; let cur=0;
+  const cover=img=>{const cw=canvas.width,ch=canvas.height,ir=img.width/img.height,cr=cw/ch;let w,h;if(ir>cr){h=ch;w=ch*ir;}else{w=cw;h=cw/ir;}ctx.clearRect(0,0,cw,ch);ctx.drawImage(img,(cw-w)/2,(ch-h)/2,w,h);};
+  const draw=f=>{const im=imgs[f]||imgs[0]; if(im&&im.naturalWidth) cover(im);};
+  const size=()=>{canvas.width=Math.round(innerWidth*dpr);canvas.height=Math.round(innerHeight*dpr);draw(cur);};
+  addEventListener('resize',size); size();
+  for(let i=1;i<SEQ.count;i++){ const im=new Image(); im.src=SEQ.path(i); imgs[i]=im; }
+  window.__glass={ ready:true,
+    update(p){ cur=Math.round(Math.max(0,Math.min(1,p/0.8))*(SEQ.count-1)); draw(cur); },
+    setStatic(){ cur=0; draw(0); } };
+  document.getElementById('loadingDot').style.opacity=0;
+  window.dispatchEvent(new Event('glassready'));
+} else {
+  // ===== INTERIM: real-time 3D crystal (shown until the render sequence is supplied) =====
+  try{
+  const THREE = await import('three');
+  const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
+
+  const canvas = document.getElementById('gl');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true, powerPreference:'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+  camera.position.set(0, 1.28, 5.2);
+  camera.lookAt(0, 1.12, 0);
+
+  renderer.toneMappingExposure = 0.92;          // avoid overexposed / white glass
+  renderer.localClippingEnabled = true;         // for the rising fill level
+
+  // Cinematic DARK studio environment: emissive strips on black → controlled crystal
+  // reflections instead of the flat white "plastic" look of RoomEnvironment.
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  function studioEnv(){
+    const s = new THREE.Scene(); s.background = new THREE.Color(0x050304);
+    const strip=(w,h,hex,mul,x,y,z,ry)=>{ const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),
+      new THREE.MeshBasicMaterial({color:new THREE.Color(hex).multiplyScalar(mul)}));
+      m.position.set(x,y,z); m.rotation.y=ry; s.add(m); };
+    strip(5,12,0xffe9cf,3.4,-7,3.5,1.5, Math.PI/2.3);    // warm key (left)
+    strip(3.4,12,0xffdca6,2.2, 7,2.5,-1.5,-Math.PI/2.3); // rim (right/back)
+    strip(9,3,0x321a1f,1.3, 0,7.5,0.5, 0);               // soft top wash
+    strip(3.5,4,0xffffff,2.6,-2.2,4.6,4, Math.PI*0.15);  // crisp white highlight
+    return s;
+  }
+  const envTex = pmrem.fromScene(studioEnv(), 0.035).texture;
+  scene.environment = envTex;
+
+  // Subtle key + rim; the environment carries most of the light
+  const key = new THREE.DirectionalLight(0xffe7c8, 1.1); key.position.set(-4,4,3); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xffd39a, 1.6); rim.position.set(4,2.4,-3.5); scene.add(rim);
+
+  // ---- Wine glass silhouette (x=radius, y=height) ----
+  const P = [
+    [0.60,0.00],[0.60,0.045],[0.30,0.075],[0.06,0.12],
+    [0.048,0.30],[0.045,0.60],[0.046,0.88],
+    [0.10,0.95],[0.24,1.00],[0.42,1.06],[0.54,1.14],
+    [0.615,1.30],[0.635,1.52],[0.605,1.74],[0.53,1.92],
+    [0.44,2.06],[0.36,2.17],[0.335,2.25],[0.33,2.28]
+  ].map(p=>new THREE.Vector2(p[0],p[1]));
+  const glassGeo = new THREE.LatheGeometry(P, 160);
+  glassGeo.computeVertexNormals();
+  const glassMat = new THREE.MeshPhysicalMaterial({
+    color:0xffffff, metalness:0, roughness:0.045, transmission:1.0, thickness:0.55,
+    ior:1.5, envMapIntensity:1.5, clearcoat:1.0, clearcoatRoughness:0.06,
+    transparent:true, side:THREE.DoubleSide, attenuationColor:0xffffff, attenuationDistance:4
+  });
+  const glass = new THREE.Mesh(glassGeo, glassMat);
+
+  // ---- Wine volume (inside bowl), revealed by a rising clip plane = the "fill" ----
+  const FILL_MIN = 1.50, FILL_MAX = 1.745;                       // 70% → full
+  const clipPlane = new THREE.Plane(new THREE.Vector3(0,-1,0), FILL_MIN); // keep y < constant
+  const W = [
+    [0.001,1.14],[0.30,1.16],[0.48,1.24],[0.575,1.42],
+    [0.58,1.58],[0.52,1.72],[0.30,1.74],[0.001,1.745]
+  ].map(p=>new THREE.Vector2(p[0],p[1]));
+  const wineGeo = new THREE.LatheGeometry(W, 160);
+  wineGeo.computeVertexNormals();
+  const wineMat = new THREE.MeshPhysicalMaterial({
+    color:0x4a0f1b, metalness:0, roughness:0.10, transmission:0.9, thickness:1.4,
+    ior:1.37, attenuationColor:0x2a070e, attenuationDistance:0.30, envMapIntensity:1.25,
+    clearcoat:0.7, clearcoatRoughness:0.16, specularIntensity:1.0,
+    transparent:true, side:THREE.DoubleSide, clippingPlanes:[clipPlane]
+  });
+  const wine = new THREE.Mesh(wineGeo, wineMat);
+
+  // top-surface vertices (the visible "pelo") — deformed by the slosh physics
+  const wpos = wineGeo.attributes.position;
+  const worig = Float32Array.from(wpos.array);
+  const surfIdx = [];
+  for(let i=0;i<wpos.count;i++){ if(worig[i*3+1] > 1.58) surfIdx.push(i); }
+
+  // ---- Falling wine stream: same material family, lands exactly on the surface ----
+  const streamGeo = new THREE.CylinderGeometry(0.026, 0.05, 1.0, 20, 1, true);
+  const streamMat = new THREE.MeshPhysicalMaterial({
+    color:0x5a1122, roughness:0.16, transmission:0.55, thickness:0.4, ior:1.35,
+    attenuationColor:0x2a070e, attenuationDistance:0.28, envMapIntensity:1.1,
+    transparent:true, side:THREE.DoubleSide
+  });
+  const stream = new THREE.Mesh(streamGeo, streamMat);
+  stream.visible = false;
+
+  const group = new THREE.Group();
+  group.add(glass); group.add(wine); group.add(stream);
+  group.position.y = 0.02;
+  scene.add(group);
+
+  // ---- Optional bloom for luxury highlight glints (graceful if unavailable) ----
+  let composer = null;
+  try{
+    const { EffectComposer } = await import('three/addons/postprocessing/EffectComposer.js');
+    const { RenderPass }     = await import('three/addons/postprocessing/RenderPass.js');
+    const { UnrealBloomPass }= await import('three/addons/postprocessing/UnrealBloomPass.js');
+    composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight), 0.30, 0.5, 0.92));
+  }catch(e){ composer = null; }
+  function renderFrame(){ if(composer) composer.render(); else renderer.render(scene,camera); }
+
+  // sizing
+  function resize(){
+    const w = innerWidth, h = innerHeight;
+    renderer.setSize(w,h,false);
+    if(composer) composer.setSize(w,h);
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+  }
+  addEventListener('resize', resize); resize();
+
+  // physics + scroll state (kept in refs, never React)
+  const state = { p:0, sloshA:0, sloshV:0, energy:0, impact:0, impactT:0, level:FILL_MIN, visible:true, static:false };
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const seg=(p,a,b)=>Math.max(0,Math.min(1,(p-a)/(b-a)));
+
+  window.__glass = {
+    ready:true,
+    update(p){ state.p = p; },
+    setStatic(){ state.p = 0; state.static = true; }
+  };
+
+  // pause rendering when the hero is off-screen (perf)
+  try{ new IntersectionObserver(es=>{ state.visible = es[0].isIntersecting; }, {threshold:0.01})
+        .observe(document.getElementById('stage')); }catch(e){}
+
+  let raf; const t0 = performance.now(); let prevGlassTilt = 0;
+  function tick(){
+    raf = requestAnimationFrame(tick);
+    if(!state.visible) return;                            // paused off-screen (perf)
+    const time = (performance.now() - t0)/1000;           // seconds since start
+    const p = state.p;
+    const mo = state.static ? 0 : 1;                      // reduced-motion → still pose
+
+    // ---- INTRO (time-based, not scroll): glass rises + wine pours to fill ----
+    const glassIn   = seg(time, 0.1, 1.0);                // fade + rise from below
+    const introFill = state.static ? 1 : seg(time, 0.6, 2.8);
+    state.level = lerp(FILL_MIN, FILL_MAX, introFill);
+    clipPlane.constant = state.level;
+
+    // stream connected to the surface: from rim opening → current wine level
+    const pouring = !!mo && time>0.5 && time<3.0;
+    if(pouring){
+      const top=2.16, bottom=state.level, len=Math.max(0.02, top-bottom);
+      stream.visible=true; stream.scale.y=len; stream.position.set(0.05,(top+bottom)/2,0);
+      const taper=1-seg(time,2.4,3.0);
+      stream.scale.x=stream.scale.z=0.55+0.45*taper; streamMat.opacity=Math.min(1,taper+0.15);
+      state.impact=1.0; state.impactT=time;               // feed impact ripples on the surface
+    } else { stream.visible=false; state.impact=Math.max(0,state.impact-0.02); }
+
+    // ---- glass motion: gentle tilt only (invisible hand) — NO 360° spin ----
+    const idle=(Math.sin(time*0.34)*0.085 + Math.sin(time*0.19+1.3)*0.045)*mo; // ~±7.4°, non-repeating
+    const scrollTilt=(seg(p,0,1)-0.15)*0.10;              // subtle tilt across scroll
+    const glassTilt=(idle+scrollTilt)*glassIn;
+    group.position.y = 0.02 - (1-glassIn)*0.28;           // rise-in
+    group.rotation.z = glassTilt;
+    group.rotation.x = Math.sin(time*0.27)*0.006*mo;
+    group.rotation.y = 0;                                 // never spins
+    // camera micro-parallax on scroll
+    camera.position.set(Math.sin(time*0.2)*0.03*mo, 1.28 - p*0.10, 5.2);
+    camera.lookAt(0, 1.12 - p*0.06, 0);
+
+    // ---- liquid physics: spring-damper driven by ANGULAR VELOCITY (inertia) ----
+    const angVel = glassTilt - prevGlassTilt; prevGlassTilt = glassTilt;
+    state.sloshV += (glassTilt - state.sloshA)*0.05 - angVel*2.2; // spring + inertial kick
+    state.sloshV *= 0.945;                                // viscosity damping (keeps oscillating, then settles)
+    state.sloshA += state.sloshV;
+    const rel = state.sloshA - glassTilt;                 // liquid lag vs glass → climbs opposite wall
+    state.energy = lerp(state.energy, Math.min(Math.abs(state.sloshV)*60 + Math.abs(rel)*8, 1)*mo, 0.15);
+
+    // ---- deform the surface: slosh tilt + travelling waves + concentric impact ----
+    const imp = state.impact;
+    for(let i=0;i<surfIdx.length;i++){
+      const ix=surfIdx[i]*3, ox=worig[ix], oz=worig[ix+2], r=Math.sqrt(ox*ox+oz*oz);
+      const tiltZ = -rel * ox * 2.4;                      // rise on the side opposite the motion
+      const waves = (Math.sin(r*22 - time*3.0)*0.40 + Math.sin(ox*16 + time*2.1)*0.35)
+                    * (0.0035 + state.energy*0.022);
+      const ripple = imp>0 ? Math.sin(r*40 - (time-state.impactT)*10.0)*Math.exp(-r*4)*imp*0.02 : 0;
+      wpos.array[ix+1] = worig[ix+1] + tiltZ + waves + ripple;
+    }
+    wpos.needsUpdate = true; wineGeo.computeVertexNormals(); // moving normals → moving highlights
+
+    // fade in; fade out into the flood transition near the end (unchanged behaviour)
+    const a = glassIn * (1 - seg(p,0.62,0.8));
+    glassMat.opacity = a; wineMat.opacity = a*0.96; if(a<0.5) stream.visible=false;
+    renderFrame();
+  }
+  tick();
+
+  // signal ready → hide loading + fallback
+  document.getElementById('loadingDot').style.opacity = 0;
+  window.dispatchEvent(new Event('glassready'));
+}catch(err){
+  console.warn('[glass] WebGL/Three non disponibile, uso fallback statico:', err && err.message);
+  window.__glassFailed = true;
+  window.dispatchEvent(new Event('glassfail'));
+}
+}
+</script>
+
+<!-- ================= ENGINE (classic) ================= -->
+<script>
+(function(){
+  "use strict";
+  const $=s=>document.querySelector(s);
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const M=window.Motion||null; const animate=M?M.animate:null; const inView=M?M.inView:null;
+
+  addEventListener('load',()=>setTimeout(()=>$('#preloader').classList.add('done'),600));
+
+  // ---- Fallback studio poster on 2D canvas (only if WebGL/Three fail) ----
+  let fbActive=false;
+  function activateFallback(){
+    if(fbActive) return; fbActive=true;
+    $('#gl').style.display='none';
+    const c=$('#fallbackCanvas'); c.style.display='block';
+    const ctx=c.getContext('2d'); const dpr=Math.min(devicePixelRatio,2);
+    function draw(){
+      c.width=innerWidth*dpr; c.height=innerHeight*dpr;
+      const w=c.width,h=c.height; ctx.clearRect(0,0,w,h);
+      ctx.fillStyle='#080405'; ctx.fillRect(0,0,w,h);
+      const g=ctx.createRadialGradient(w*0.5,h*0.42,10,w*0.5,h*0.42,Math.max(w,h)*0.55);
+      g.addColorStop(0,'rgba(74,15,27,0.55)'); g.addColorStop(0.5,'rgba(24,10,16,0.4)'); g.addColorStop(1,'rgba(6,3,5,0)');
+      ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+      const fg=ctx.createRadialGradient(w*0.5,h*0.72,4,w*0.5,h*0.72,w*0.26);
+      fg.addColorStop(0,'rgba(168,138,86,0.10)'); fg.addColorStop(1,'rgba(168,138,86,0)');
+      ctx.fillStyle=fg; ctx.fillRect(0,0,w,h);
+    }
+    draw(); addEventListener('resize',draw);
+    $('#loadingDot').style.opacity=0;
+  }
+  addEventListener('glassfail', activateFallback);
+  addEventListener('glassready', ()=>{ $('#loadingDot').style.opacity=0; });
+  // safety net: if neither event fires (module blocked), fall back
+  setTimeout(()=>{ if(!window.__glass && !window.__glassFailed) activateFallback(); }, 4000);
+
+  // ---- Scroll engine ----
+  const scroller=$('#heroScroll');
+  function progress(){ const total=scroller.offsetHeight-innerHeight; return clamp((-scroller.getBoundingClientRect().top)/total,0,1); }
+
+  function onScroll(){
+    const p=progress();
+    if(window.__glass) window.__glass.update(p);
+    $('#hdr').classList.toggle('solid', (scrollY||document.documentElement.scrollTop)>60);
+    $('#heroLogo').style.opacity=1-seg(p,0.05,0.18); $('#heroLogo').style.transform=`translateY(${-20*seg(p,0.05,0.2)}px)`;
+    $('#heroCopy').style.opacity=1-seg(p,0.14,0.30); $('#heroCopy').style.transform=`translateY(${30*seg(p,0.14,0.3)}px)`;
+    $('#hint').style.opacity=1-seg(p,0.02,0.10);
+    const flood=seg(p,0.62,0.98);
+    const fe=$('#flood'); fe.style.display=flood>0?'block':'none'; fe.style.height=(flood*118)+'vh';
+    $('#reveal').style.opacity=seg(p,0.78,0.98);
+    // whole-page scroll progress thread
+    const sc=scrollY||document.documentElement.scrollTop;
+    const docP=clamp(sc/((document.documentElement.scrollHeight-innerHeight)||1),0,1);
+    const sp=$('#scrollProgress'); if(sp) sp.style.width=(docP*100)+'%';
+  }
+
+  function init(){
+    if(reduce){
+      scroller.style.height='100vh'; $('#hint').style.display='none';
+      $('#flood').style.display='none'; $('#reveal').style.display='none'; $('#hdr').classList.add('solid');
+      if(window.__glass) window.__glass.setStatic();
+      return;
+    }
+    if(animate){
+      animate('#heroLogo',{opacity:[0,1],transform:['translateY(-16px)','translateY(0)']},{duration:1.2,delay:1.1,easing:'ease-out'});
+      animate('#heroCopy',{opacity:[0,1],transform:['translateY(24px)','translateY(0)']},{duration:1.2,delay:1.3,easing:'ease-out'});
+      animate('#hint',{opacity:[0,1]},{duration:1,delay:1.6});
+    }
+    document.querySelectorAll('[data-rise]').forEach(el=>{
+      if(inView){ el.style.opacity=0; el.style.transform='translateY(40px)';
+        inView(el,()=>animate(el,{opacity:[0,1],transform:['translateY(40px)','translateY(0)']},{duration:1,easing:'ease-out'}),{margin:'-18% 0px'}); }
+    });
+    if(window.Lenis){ const lenis=new Lenis({lerp:.1,wheelMultiplier:.9});
+      (function raf(t){lenis.raf(t);requestAnimationFrame(raf);})(0); lenis.on('scroll',onScroll); window.__lenis=lenis; }
+    addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+  }
+  init();
+})();
+</script>
+
+<!-- ================= UX LAYER: menu, micro-interactions ================= -->
+<script>
+(function(){
+  "use strict";
+  const $=s=>document.querySelector(s);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer=matchMedia('(pointer:fine)').matches;
+  const M=window.Motion||null; const animate=M?M.animate:null;
+
+  /* ---- Mobile full-screen menu ---- */
+  const toggle=$('#menuToggle'), menu=$('#mobileMenu');
+  let open=false, lastFocus=null;
+  const links=menu?[...menu.querySelectorAll('a')]:[];
+  function setOpen(v){
+    open=v; if(!toggle||!menu) return;
+    toggle.setAttribute('aria-expanded',String(v));
+    toggle.setAttribute('aria-label',v?'Chiudi il menu':'Apri il menu');
+    if(v){
+      lastFocus=document.activeElement; menu.hidden=false;
+      requestAnimationFrame(()=>menu.classList.add('open'));
+      try{window.__lenis&&window.__lenis.stop();}catch(e){}
+      document.body.style.overflow='hidden';
+      setTimeout(()=>links[0]&&links[0].focus(),120);
+    }else{
+      menu.classList.remove('open');
+      try{window.__lenis&&window.__lenis.start();}catch(e){}
+      document.body.style.overflow='';
+      setTimeout(()=>{menu.hidden=true;},520);
+      lastFocus&&lastFocus.focus&&lastFocus.focus();
+    }
+  }
+  toggle&&toggle.addEventListener('click',()=>setOpen(!open));
+  links.forEach(a=>a.addEventListener('click',()=>setOpen(false)));
+  document.addEventListener('keydown',e=>{
+    if(!open) return;
+    if(e.key==='Escape'){ setOpen(false); }
+    if(e.key==='Tab'){ // simple focus trap
+      const f=links; if(!f.length) return;
+      const first=f[0], last=f[f.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* ---- Nav entrance (stagger) ---- */
+  if(animate && !reduce){
+    animate('header nav a, header .menu-toggle',
+      {opacity:[0,1],transform:['translateY(-8px)','translateY(0)']},
+      {duration:.7,delay:M.stagger?M.stagger(.06,{start:1.2}):1.2,easing:'ease-out'});
+  }
+
+  /* ---- Magnetic buttons (fine pointer only, motion-safe) ---- */
+  if(finePointer && !reduce){
+    document.querySelectorAll('.btn').forEach(btn=>{
+      const strength=14;
+      btn.addEventListener('mousemove',e=>{
+        const r=btn.getBoundingClientRect();
+        const x=(e.clientX-(r.left+r.width/2))/r.width, y=(e.clientY-(r.top+r.height/2))/r.height;
+        btn.style.transform=`translate(${x*strength}px,${y*strength-2}px)`;
+      });
+      btn.addEventListener('mouseleave',()=>{ btn.style.transform=''; });
+    });
+  }
+})();
+</script>
+</body>
+</html>

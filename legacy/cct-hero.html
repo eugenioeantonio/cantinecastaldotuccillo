@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cantine Castaldo Tuccillo — Hero (demo)</title>
+<meta name="description" content="Il tempo diventa vino. Cinque generazioni, un territorio da raccontare." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bordeaux:#4A0F1B;
+    --wine-dark:#25070D;
+    --carbon:#111111;
+    --ivory:#F3EFE6;
+    --stone:#D4C7B5;
+    --gold:#A88A56;
+    --white-soft:#FAF8F3;
+    --serif:"Cormorant Garamond", Georgia, serif;
+    --sans:"Inter", system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:#08040a;color:var(--ivory);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  body{overflow-x:hidden}
+  ::selection{background:var(--bordeaux);color:var(--ivory)}
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- Preloader ---------- */
+  #preloader{position:fixed;inset:0;z-index:120;background:#08040a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;transition:opacity 1s ease .3s, visibility 1s ease .3s}
+  #preloader.done{opacity:0;visibility:hidden}
+  .pre-mark{font-family:var(--serif);font-size:clamp(22px,3vw,30px);letter-spacing:.55em;color:var(--ivory);text-indent:.55em;opacity:0;animation:preIn 1.4s ease forwards}
+  .pre-line{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:preLine 1.8s ease forwards .4s}
+  @keyframes preIn{to{opacity:1}}
+  @keyframes preLine{to{width:190px}}
+
+  /* ---------- Header ---------- */
+  header{position:fixed;top:0;left:0;width:100%;z-index:90;display:flex;align-items:center;justify-content:space-between;
+    padding:22px clamp(20px,5vw,64px);transition:background .6s ease, padding .6s ease, border-color .6s ease;
+    border-bottom:1px solid rgba(168,138,86,0);}
+  header.solid{background:rgba(8,4,10,.72);backdrop-filter:blur(14px);padding:14px clamp(20px,5vw,64px);border-bottom:1px solid rgba(168,138,86,.18)}
+  .brand{font-family:var(--serif);line-height:.98;letter-spacing:.06em}
+  .brand b{display:block;font-weight:600;font-size:16px;letter-spacing:.34em}
+  .brand span{display:block;font-family:var(--sans);font-weight:300;font-size:9px;letter-spacing:.5em;color:var(--stone);margin-top:4px}
+  nav{display:flex;align-items:center;gap:34px}
+  nav a{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;color:var(--ivory);opacity:.82;position:relative;padding:4px 0}
+  nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold);transition:width .4s ease}
+  nav a:hover{opacity:1}
+  nav a:hover::after{width:100%}
+  .cart{display:flex;align-items:center;gap:8px;border:1px solid rgba(168,138,86,.4);border-radius:999px;padding:8px 16px;font-size:12px;letter-spacing:.14em}
+  .cart svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:1.4}
+  @media(max-width:880px){nav .nlink{display:none}}
+
+  /* ---------- Hero scroll structure ---------- */
+  .hero-scroll{position:relative;height:460vh}
+  .stage{position:relative;height:100vh;width:100%;overflow:hidden;
+    background:radial-gradient(120% 90% at 50% 22%, #1a0a10 0%, #0b0509 46%, #060306 100%)}
+  .vignette{position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 220px 70px rgba(0,0,0,.85);z-index:5}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.05;z-index:6;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+  .stage-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:4}
+  .glass-wrap{width:min(46vh,340px);will-change:transform}
+  svg .outline{fill:none;stroke:rgba(243,239,230,.5);stroke-width:1.5}
+  svg .rim{fill:none;stroke:rgba(243,239,230,.65);stroke-width:1.5}
+  svg .glint{fill:none;stroke:rgba(255,255,255,.85);stroke-width:2;stroke-linecap:round}
+
+  /* Hero copy */
+  .hero-copy{position:absolute;z-index:8;left:0;right:0;bottom:15vh;text-align:center;padding:0 24px;will-change:transform,opacity}
+  .hero-copy .eyebrow{font-size:11px;letter-spacing:.44em;text-transform:uppercase;color:var(--gold);margin-bottom:22px}
+  .hero-copy h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,7vw,86px);line-height:1.02;letter-spacing:.01em}
+  .hero-copy h1 em{font-style:italic;color:var(--stone)}
+  .hero-copy p{margin-top:18px;font-weight:300;font-size:clamp(13px,1.4vw,16px);letter-spacing:.05em;color:rgba(243,239,230,.72)}
+  .cta-row{margin-top:32px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{font-size:12px;letter-spacing:.18em;text-transform:uppercase;padding:15px 30px;border-radius:999px;transition:all .45s ease;border:1px solid transparent}
+  .btn-primary{background:var(--ivory);color:var(--wine-dark)}
+  .btn-primary:hover{background:var(--gold);color:#1a0a10}
+  .btn-ghost{border-color:rgba(243,239,230,.4);color:var(--ivory)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+  .hero-logo{position:absolute;z-index:8;left:0;right:0;top:16vh;text-align:center;will-change:transform,opacity}
+  .hero-logo .mk{font-family:var(--serif);font-size:clamp(16px,2vw,20px);letter-spacing:.5em;text-indent:.5em;color:var(--ivory)}
+  .hero-logo .sub{font-size:9px;letter-spacing:.46em;color:var(--stone);margin-top:8px}
+
+  .scroll-hint{position:absolute;z-index:8;left:0;right:0;bottom:34px;text-align:center;will-change:opacity}
+  .scroll-hint span{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(243,239,230,.6)}
+  .chev{margin:12px auto 0;width:20px;height:20px;border-right:1px solid var(--gold);border-bottom:1px solid var(--gold);transform:rotate(45deg);animation:bob 2s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.4}50%{transform:rotate(45deg) translate(4px,4px);opacity:1}}
+
+  /* Pour stream */
+  #stream{position:absolute;z-index:3;top:32%;left:44%;transform-origin:top center;transform:scaleY(0);opacity:0;will-change:transform,opacity}
+  #stream .col{width:10px;height:52vh;margin:0 auto;border-radius:0 0 40% 40%/0 0 8% 8%;
+    background:linear-gradient(180deg,#6d1226 0%,#4A0F1B 40%,#25070D 100%)}
+
+  /* Wine flood / liquid transition */
+  .flood{position:absolute;left:0;bottom:0;width:100%;height:0;z-index:7;will-change:height;
+    background:linear-gradient(180deg,#5a1122 0%, #4A0F1B 30%, #25070D 100%)}
+  .flood .wave{position:absolute;top:-58px;left:0;width:100%;height:60px;display:block}
+
+  /* Reveal title inside stage */
+  .reveal{position:absolute;inset:0;z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:0 24px;opacity:0;pointer-events:none;will-change:opacity,transform}
+  .reveal .eyebrow{font-size:11px;letter-spacing:.44em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+  .reveal h2{font-family:var(--serif);font-weight:500;font-size:clamp(34px,6vw,74px);line-height:1.05;color:var(--ivory)}
+  .reveal h2 em{font-style:italic;color:var(--stone)}
+
+  /* ---------- Cinque Generazioni (after pin) ---------- */
+  .generazioni{background:linear-gradient(180deg,#25070D 0%, #1a0a10 60%, #120a10 100%);padding:14vh clamp(24px,7vw,120px) 18vh;position:relative}
+  .gen-intro{max-width:760px;margin:0 auto 12vh;text-align:center}
+  .gen-intro p{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.6vw,30px);line-height:1.5;color:rgba(243,239,230,.86)}
+  .timeline{max-width:900px;margin:0 auto;position:relative}
+  .timeline::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(168,138,86,.5),transparent);transform:translateX(-.5px)}
+  .tl-item{position:relative;width:50%;padding:26px 40px}
+  .tl-item:nth-child(odd){left:0;text-align:right}
+  .tl-item:nth-child(even){left:50%;text-align:left}
+  .tl-item .dot{position:absolute;top:34px;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 5px rgba(168,138,86,.15)}
+  .tl-item:nth-child(odd) .dot{right:-4.5px}
+  .tl-item:nth-child(even) .dot{left:-4.5px}
+  .tl-item .g{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold)}
+  .tl-item h3{font-family:var(--serif);font-weight:500;font-size:clamp(22px,2.4vw,30px);margin:8px 0 6px;color:var(--ivory)}
+  .tl-item p{font-weight:300;font-size:14px;line-height:1.7;color:rgba(243,239,230,.6)}
+  .tl-item .ph{font-size:12px;color:var(--stone);font-style:italic;opacity:.7}
+  @media(max-width:720px){
+    .timeline::before{left:8px}
+    .tl-item{width:100%;left:0!important;text-align:left!important;padding-left:34px;padding-right:0}
+    .tl-item .dot{left:4px!important;right:auto!important}
+  }
+  .demo-tag{position:fixed;left:14px;bottom:14px;z-index:100;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(243,239,230,.5);background:rgba(8,4,10,.6);border:1px solid rgba(168,138,86,.25);border-radius:999px;padding:7px 13px;backdrop-filter:blur(6px)}
+  .end-note{text-align:center;padding:8vh 24px 12vh;color:rgba(243,239,230,.4);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<div id="preloader">
+  <div class="pre-mark">CASTALDO&nbsp;TUCCILLO</div>
+  <div class="pre-line"></div>
+</div>
+
+<header id="hdr">
+  <div class="brand"><b>CASTALDO TUCCILLO</b><span>CANTINE · DAL VESUVIO</span></div>
+  <nav>
+    <a class="nlink" href="#">La Cantina</a>
+    <a class="nlink" href="#">Vini</a>
+    <a class="nlink" href="#">Metodo Vesuviano</a>
+    <a class="nlink" href="#">Esperienze</a>
+    <a class="cart" href="#"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6 5 3H2"/></svg>Shop</a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero-scroll" id="heroScroll">
+  <div class="stage" id="stage">
+
+    <div class="hero-logo" id="heroLogo">
+      <div class="mk">CASTALDO&nbsp;TUCCILLO</div>
+      <div class="sub">CINQUE GENERAZIONI · SAN GENNARO VESUVIANO</div>
+    </div>
+
+    <!-- Pour stream -->
+    <div id="stream"><div class="col"></div></div>
+
+    <!-- Glass -->
+    <div class="stage-center">
+      <div class="glass-wrap" id="glassWrap">
+        <svg viewBox="0 0 400 660" width="100%" height="100%">
+          <defs>
+            <radialGradient id="wineGrad" cx="42%" cy="30%" r="80%">
+              <stop offset="0%" stop-color="#7d1226"/>
+              <stop offset="45%" stop-color="#4A0F1B"/>
+              <stop offset="100%" stop-color="#25070D"/>
+            </radialGradient>
+            <linearGradient id="surfGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#8a1a30"/>
+              <stop offset="50%" stop-color="#b23148"/>
+              <stop offset="100%" stop-color="#7d1226"/>
+            </linearGradient>
+            <clipPath id="bowlClip">
+              <path d="M124,96 C123,176 154,300 200,332 C246,300 277,176 276,96 C250,110 150,110 124,96 Z"/>
+            </clipPath>
+          </defs>
+
+          <!-- glass group rotates -->
+          <g id="glass">
+            <!-- foot + stem -->
+            <ellipse cx="200" cy="596" rx="66" ry="12" class="outline"/>
+            <path class="outline" d="M182,470 L160,588 M218,470 L240,588"/>
+            <rect x="197" y="332" width="6" height="140" fill="rgba(243,239,230,.28)"/>
+            <!-- bowl outline -->
+            <path class="outline" d="M124,96 C123,176 154,300 200,332 C246,300 277,176 276,96"/>
+            <!-- wine (counter-rotates) -->
+            <g clip-path="url(#bowlClip)">
+              <g id="wine">
+                <rect id="wineBody" x="70" y="188" width="260" height="220" fill="url(#wineGrad)"/>
+                <ellipse id="wineSurf" cx="200" cy="188" rx="90" ry="9" fill="url(#surfGrad)" opacity=".95"/>
+              </g>
+            </g>
+            <!-- rim + glints -->
+            <ellipse class="rim" cx="200" cy="96" rx="76" ry="15"/>
+            <path class="glint" d="M150,150 C146,200 158,250 178,286" opacity=".5"/>
+            <path class="glint" d="M243,140 C250,180 246,220 232,250" opacity=".25"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Liquid flood -->
+    <div class="flood" id="flood">
+      <svg class="wave" viewBox="0 0 1440 60" preserveAspectRatio="none">
+        <path d="M0,40 C240,4 480,4 720,30 C960,56 1200,56 1440,26 L1440,60 L0,60 Z" fill="#5a1122"/>
+      </svg>
+    </div>
+
+    <!-- Hero copy -->
+    <div class="hero-copy" id="heroCopy">
+      <div class="eyebrow">Cinque generazioni · Un territorio</div>
+      <h1>Il tempo <em>diventa</em> vino.</h1>
+      <p>Dal cuore del Vesuvio, una storia iniziata cinque generazioni fa.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#">Scopri la nostra storia</a>
+        <a class="btn btn-ghost" href="#">Esplora i vini</a>
+      </div>
+    </div>
+
+    <!-- Reveal title -->
+    <div class="reveal" id="reveal">
+      <div class="eyebrow">La nostra storia</div>
+      <h2>Cinque generazioni,<br><em>una sola visione.</em></h2>
+    </div>
+
+    <div class="scroll-hint" id="hint">
+      <span>Scorri per entrare nella nostra storia</span>
+      <div class="chev"></div>
+    </div>
+
+    <div class="vignette"></div>
+    <div class="grain"></div>
+  </div>
+</section>
+
+<!-- ============ CINQUE GENERAZIONI ============ -->
+<section class="generazioni">
+  <div class="gen-intro" data-rise>
+    <p>Non produciamo soltanto vino. Custodiamo il tempo, il territorio e il lavoro di chi ci ha preceduto — una mano dopo l'altra, una vendemmia dopo l'altra.</p>
+  </div>
+  <div class="timeline">
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Prima generazione</div><h3>Le radici</h3><p class="ph">[Nome fondatore e anno da confermare]</p><p>Dove tutto è cominciato: la prima vite, la prima botte, la scelta di restare legati al Vesuvio.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Seconda generazione</div><h3>La cura</h3><p class="ph">[Nome e periodo da confermare]</p><p>La conoscenza del suolo lavico si affina e diventa metodo.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Terza generazione</div><h3>Il metodo</h3><p class="ph">[Nome e periodo da confermare]</p><p>Nasce e si custodisce il gesto del Lammiccato e del Metodo Vesuviano.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Quarta generazione</div><h3>Il riconoscimento</h3><p class="ph">[Nome e periodo da confermare]</p><p>La qualità varca i confini: dal Vesuvio verso l'Europa.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Quinta generazione</div><h3>Oggi</h3><p class="ph">[Nome e periodo da confermare]</p><p>La stessa terra, lo stesso rispetto — raccontati con un linguaggio nuovo.</p></div>
+  </div>
+</section>
+
+<div class="end-note">— Fine anteprima Hero · le sezioni successive seguiranno la stessa direzione —</div>
+
+<div class="demo-tag">Demo Hero · Castaldo Tuccillo</div>
+
+<!-- ============ SCRIPTS ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.14/lenis.min.js"></script>
+<script>
+(function(){
+  // preloader
+  window.addEventListener('load',()=>{ setTimeout(()=>document.getElementById('preloader').classList.add('done'),650); });
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hdr = document.getElementById('hdr');
+
+  // ----- Reduced motion: static, readable fallback -----
+  if(reduce || !window.gsap){
+    document.getElementById('heroScroll').style.height='100vh';
+    document.getElementById('heroCopy').style.opacity=1;
+    document.getElementById('hint').style.display='none';
+    document.getElementById('flood').style.display='none';
+    document.getElementById('reveal').style.display='none';
+    document.getElementById('stream').style.display='none';
+    hdr.classList.add('solid');
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ----- Lenis smooth scroll (graceful if CDN missing) -----
+  if(window.Lenis){
+    const lenis = new Lenis({lerp:.1, wheelMultiplier:.9});
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t=> lenis.raf(t*1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  // header solidify
+  ScrollTrigger.create({start:60, onUpdate:self=>{
+    self.scroll()>60 ? hdr.classList.add('solid') : hdr.classList.remove('solid');
+  }});
+
+  gsap.set('#glass',{svgOrigin:'200 332'});
+  gsap.set('#wine',{svgOrigin:'200 332'});
+  // entrance of glass
+  gsap.from('#glassWrap',{opacity:0,y:60,scale:.9,duration:1.6,ease:'power2.out',delay:1});
+  gsap.from('#heroLogo',{opacity:0,y:-20,duration:1.4,ease:'power2.out',delay:1.2});
+  gsap.from('#heroCopy',{opacity:0,y:30,duration:1.4,ease:'power2.out',delay:1.4});
+
+  // ----- Master scroll timeline -----
+  const tl = gsap.timeline({
+    scrollTrigger:{ trigger:'#heroScroll', start:'top top', end:'bottom bottom', scrub:1, pin:'#stage', anticipatePin:1 }
+  });
+
+  // beat 2 — gentle rotation + wine sway
+  tl.to('#glass',{rotation:-6, ease:'sine.inOut'},0)
+    .to('#wine',{rotation:6, ease:'sine.inOut'},0)
+    .to('#wineSurf',{attr:{cx:210}, ease:'sine.inOut'},0)
+    .to('#hint',{opacity:0, duration:.4},0)
+
+  // beat 3 — tilt toward rim
+    .to('#glass',{rotation:-30, ease:'sine.in'},.18)
+    .to('#wine',{rotation:30, ease:'sine.in'},.18)
+    .to('#heroCopy',{opacity:0, y:-30, ease:'power1.in'},.20)
+
+  // beat 4 — full pour + stream
+    .to('#glass',{rotation:-58, ease:'power1.in'},.36)
+    .to('#wine',{rotation:58, ease:'power1.in'},.36)
+    .to('#wineBody',{attr:{y:150}, ease:'power1.in'},.36)
+    .to('#stream',{opacity:1, scaleY:1, duration:.18, ease:'power1.in'},.40)
+    .to('#heroLogo',{opacity:0, duration:.3},.38)
+
+  // beat 5 — liquid flood rises + reveal
+    .to('#flood',{height:'118vh', ease:'power2.inOut', duration:.5},.52)
+    .to('#stream',{opacity:0, duration:.2},.60)
+    .to('#glassWrap',{opacity:0, duration:.25},.58)
+    .to('#reveal',{opacity:1, duration:.35, ease:'power2.out'},.66)
+    .to('#reveal',{y:-10, duration:.3, ease:'sine.inOut'},.82);
+
+  // ----- Cinque Generazioni reveals -----
+  gsap.utils.toArray('[data-rise]').forEach(el=>{
+    gsap.from(el,{opacity:0,y:40,duration:1,ease:'power2.out',
+      scrollTrigger:{trigger:el,start:'top 82%'}});
+  });
+
+  window.addEventListener('load',()=>ScrollTrigger.refresh());
+})();
+</script>
+</body>
+</html>

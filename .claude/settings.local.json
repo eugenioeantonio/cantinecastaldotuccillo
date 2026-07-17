@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp index.html \"backups/index.BACKUP-$\\(date +%Y%m%d-%H%M%S\\).html\")",
+      "Bash(cp cct-hero_5.html \"backups/cct-hero_5.BACKUP-$\\(date +%Y%m%d-%H%M%S\\).html\")",
+      "mcp__21st__search"
+    ]
+  }
+}

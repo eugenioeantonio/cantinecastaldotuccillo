@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cantine Castaldo Tuccillo — Hero (frame-sequence)</title>
+<meta name="description" content="Il tempo diventa vino. Cinque generazioni, un territorio da raccontare." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bordeaux:#4A0F1B; --wine-dark:#25070D; --carbon:#111111;
+    --ivory:#F3EFE6; --stone:#D4C7B5; --gold:#A88A56; --white-soft:#FAF8F3;
+    --serif:"Cormorant Garamond", Georgia, serif;
+    --sans:"Inter", system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:#08040a;color:var(--ivory);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  body{overflow-x:hidden}
+  ::selection{background:var(--bordeaux);color:var(--ivory)}
+  a{color:inherit;text-decoration:none}
+
+  /* Preloader */
+  #preloader{position:fixed;inset:0;z-index:120;background:#08040a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;transition:opacity 1s ease .2s, visibility 1s ease .2s}
+  #preloader.done{opacity:0;visibility:hidden}
+  .pre-mark{font-family:var(--serif);font-size:clamp(22px,3vw,30px);letter-spacing:.55em;text-indent:.55em;opacity:0;animation:preIn 1.4s ease forwards}
+  .pre-line{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:preLine 1.8s ease forwards .4s}
+  @keyframes preIn{to{opacity:1}}
+  @keyframes preLine{to{width:190px}}
+
+  /* Header */
+  header{position:fixed;top:0;left:0;width:100%;z-index:90;display:flex;align-items:center;justify-content:space-between;
+    padding:22px clamp(20px,5vw,64px);transition:background .6s ease, padding .6s ease, border-color .6s ease;border-bottom:1px solid rgba(168,138,86,0)}
+  header.solid{background:rgba(8,4,10,.72);backdrop-filter:blur(14px);padding:14px clamp(20px,5vw,64px);border-bottom:1px solid rgba(168,138,86,.18)}
+  .brand{font-family:var(--serif);line-height:.98}
+  .brand b{display:block;font-weight:600;font-size:16px;letter-spacing:.34em}
+  .brand span{display:block;font-family:var(--sans);font-weight:300;font-size:9px;letter-spacing:.5em;color:var(--stone);margin-top:4px}
+  nav{display:flex;align-items:center;gap:34px}
+  nav a{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ivory);opacity:.82;position:relative;padding:4px 0}
+  nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold);transition:width .4s ease}
+  nav a:hover{opacity:1}nav a:hover::after{width:100%}
+  .cart{display:flex;align-items:center;gap:8px;border:1px solid rgba(168,138,86,.4);border-radius:999px;padding:8px 16px;font-size:12px;letter-spacing:.14em}
+  .cart svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:1.4}
+  @media(max-width:880px){nav .nlink{display:none}}
+
+  /* Hero scroll + sticky stage */
+  .hero-scroll{position:relative;height:520vh}
+  .stage{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;background:#080405}
+  #frames{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
+  .vignette{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 240px 80px rgba(0,0,0,.9);z-index:5}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.045;z-index:6;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+  /* Overlays */
+  .hero-logo{position:absolute;z-index:8;left:0;right:0;top:15vh;text-align:center}
+  .hero-logo .mk{font-family:var(--serif);font-size:clamp(16px,2vw,20px);letter-spacing:.5em;text-indent:.5em}
+  .hero-logo .sub{font-size:9px;letter-spacing:.46em;color:var(--stone);margin-top:8px}
+  .hero-copy{position:absolute;z-index:8;left:0;right:0;bottom:14vh;text-align:center;padding:0 24px}
+  .hero-copy .eyebrow{font-size:11px;letter-spacing:.44em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+  .hero-copy h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,7vw,86px);line-height:1.02}
+  .hero-copy h1 em{font-style:italic;color:var(--stone)}
+  .hero-copy p{margin-top:16px;font-weight:300;font-size:clamp(13px,1.4vw,16px);letter-spacing:.05em;color:rgba(243,239,230,.72)}
+  .cta-row{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{font-size:12px;letter-spacing:.18em;text-transform:uppercase;padding:15px 30px;border-radius:999px;transition:all .45s ease;border:1px solid transparent}
+  .btn-primary{background:var(--ivory);color:var(--wine-dark)}.btn-primary:hover{background:var(--gold);color:#1a0a10}
+  .btn-ghost{border-color:rgba(243,239,230,.4);color:var(--ivory)}.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+  .scroll-hint{position:absolute;z-index:8;left:0;right:0;bottom:30px;text-align:center}
+  .scroll-hint span{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(243,239,230,.6)}
+  .chev{margin:12px auto 0;width:18px;height:18px;border-right:1px solid var(--gold);border-bottom:1px solid var(--gold);transform:rotate(45deg);animation:bob 2s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.4}50%{transform:rotate(45deg) translate(4px,4px);opacity:1}}
+
+  /* Placeholder / asset slot (shown only until real frames are provided) */
+  .asset-slot{position:absolute;z-index:7;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;pointer-events:none}
+  .asset-slot .ring{width:min(40vh,300px);height:min(40vh,300px);margin:0 auto;border-radius:50%;
+    border:1px solid rgba(168,138,86,.28);box-shadow:0 0 120px 10px rgba(90,17,34,.25) inset;
+    display:flex;align-items:center;justify-content:center}
+  .asset-slot .lab{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(212,199,181,.7);line-height:2}
+  .asset-slot .lab b{display:block;color:var(--gold);font-weight:500;letter-spacing:.34em}
+  .asset-slot .bar{width:180px;height:2px;background:rgba(243,239,230,.12);margin:14px auto 0;border-radius:2px;overflow:hidden}
+  .asset-slot .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--bordeaux),var(--gold))}
+
+  /* Liquid transition + reveal */
+  .flood{position:absolute;left:0;bottom:0;width:100%;height:0;z-index:9;background:linear-gradient(180deg,#5a1122 0%,#4A0F1B 30%,#25070D 100%)}
+  .flood .wave{position:absolute;top:-56px;left:0;width:100%;height:58px;display:block}
+  .reveal{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;opacity:0;pointer-events:none}
+  .reveal .eyebrow{font-size:11px;letter-spacing:.44em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .reveal h2{font-family:var(--serif);font-weight:500;font-size:clamp(34px,6vw,74px);line-height:1.05}
+  .reveal h2 em{font-style:italic;color:var(--stone)}
+
+  /* Cinque Generazioni */
+  .generazioni{background:linear-gradient(180deg,#25070D 0%,#1a0a10 60%,#120a10 100%);padding:14vh clamp(24px,7vw,120px) 18vh;position:relative}
+  .gen-intro{max-width:760px;margin:0 auto 12vh;text-align:center}
+  .gen-intro p{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.6vw,30px);line-height:1.5;color:rgba(243,239,230,.86)}
+  .timeline{max-width:900px;margin:0 auto;position:relative}
+  .timeline::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(168,138,86,.5),transparent);transform:translateX(-.5px)}
+  .tl-item{position:relative;width:50%;padding:26px 40px}
+  .tl-item:nth-child(odd){left:0;text-align:right}
+  .tl-item:nth-child(even){left:50%;text-align:left}
+  .tl-item .dot{position:absolute;top:34px;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 5px rgba(168,138,86,.15)}
+  .tl-item:nth-child(odd) .dot{right:-4.5px}.tl-item:nth-child(even) .dot{left:-4.5px}
+  .tl-item .g{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold)}
+  .tl-item h3{font-family:var(--serif);font-weight:500;font-size:clamp(22px,2.4vw,30px);margin:8px 0 6px}
+  .tl-item p{font-weight:300;font-size:14px;line-height:1.7;color:rgba(243,239,230,.6)}
+  .tl-item .ph{font-size:12px;color:var(--stone);font-style:italic;opacity:.7}
+  @media(max-width:720px){
+    .timeline::before{left:8px}
+    .tl-item{width:100%;left:0!important;text-align:left!important;padding-left:34px;padding-right:0}
+    .tl-item .dot{left:4px!important;right:auto!important}
+  }
+  .demo-tag{position:fixed;left:14px;bottom:14px;z-index:100;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(243,239,230,.5);background:rgba(8,4,10,.6);border:1px solid rgba(168,138,86,.25);border-radius:999px;padding:7px 13px;backdrop-filter:blur(6px)}
+  .end-note{text-align:center;padding:8vh 24px 12vh;color:rgba(243,239,230,.4);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<div id="preloader"><div class="pre-mark">CASTALDO&nbsp;TUCCILLO</div><div class="pre-line"></div></div>
+
+<header id="hdr">
+  <div class="brand"><b>CASTALDO TUCCILLO</b><span>CANTINE · DAL VESUVIO</span></div>
+  <nav>
+    <a class="nlink" href="#">La Cantina</a>
+    <a class="nlink" href="#">Vini</a>
+    <a class="nlink" href="#">Metodo Vesuviano</a>
+    <a class="nlink" href="#">Esperienze</a>
+    <a class="cart" href="#"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6 5 3H2"/></svg>Shop</a>
+  </nav>
+</header>
+
+<!-- ============ HERO (frame sequence) ============ -->
+<section class="hero-scroll" id="heroScroll">
+  <div class="stage" id="stage">
+    <canvas id="frames"></canvas>
+
+    <!-- Placeholder asset slot (auto-hides when real frames load) -->
+    <div class="asset-slot" id="assetSlot">
+      <div class="ring">
+        <div class="lab">
+          <b>Calice fotorealistico</b>
+          sequenza render · <span id="frameCount">frame 000 / 120</span><br>
+          asset in attesa di consegna
+          <div class="bar"><i id="preBar"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-logo" id="heroLogo">
+      <div class="mk">CASTALDO&nbsp;TUCCILLO</div>
+      <div class="sub">CINQUE GENERAZIONI · SAN GENNARO VESUVIANO</div>
+    </div>
+
+    <div class="hero-copy" id="heroCopy">
+      <div class="eyebrow">Cinque generazioni · Un territorio</div>
+      <h1>Il tempo <em>diventa</em> vino.</h1>
+      <p>Dal cuore del Vesuvio, una storia iniziata cinque generazioni fa.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#">Scopri la nostra storia</a>
+        <a class="btn btn-ghost" href="#">Esplora i vini</a>
+      </div>
+    </div>
+
+    <div class="flood" id="flood">
+      <svg class="wave" viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,40 C240,4 480,4 720,30 C960,56 1200,56 1440,26 L1440,60 L0,60 Z" fill="#5a1122"/></svg>
+    </div>
+
+    <div class="reveal" id="reveal">
+      <div class="eyebrow">La nostra storia</div>
+      <h2>Cinque generazioni,<br><em>una sola visione.</em></h2>
+    </div>
+
+    <div class="scroll-hint" id="hint"><span>Scorri per entrare nella nostra storia</span><div class="chev"></div></div>
+    <div class="vignette"></div>
+    <div class="grain"></div>
+  </div>
+</section>
+
+<!-- ============ CINQUE GENERAZIONI ============ -->
+<section class="generazioni">
+  <div class="gen-intro" data-rise><p>Non produciamo soltanto vino. Custodiamo il tempo, il territorio e il lavoro di chi ci ha preceduto — una mano dopo l'altra, una vendemmia dopo l'altra.</p></div>
+  <div class="timeline">
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Prima generazione</div><h3>Le radici</h3><p class="ph">[Nome fondatore e anno da confermare]</p><p>Dove tutto è cominciato: la prima vite, la prima botte, la scelta di restare legati al Vesuvio.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Seconda generazione</div><h3>La cura</h3><p class="ph">[Nome e periodo da confermare]</p><p>La conoscenza del suolo lavico si affina e diventa metodo.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Terza generazione</div><h3>Il metodo</h3><p class="ph">[Nome e periodo da confermare]</p><p>Nasce e si custodisce il gesto del Lammiccato e del Metodo Vesuviano.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Quarta generazione</div><h3>Il riconoscimento</h3><p class="ph">[Nome e periodo da confermare]</p><p>La qualità varca i confini: dal Vesuvio verso l'Europa.</p></div>
+    <div class="tl-item" data-rise><span class="dot"></span><div class="g">Quinta generazione</div><h3>Oggi</h3><p class="ph">[Nome e periodo da confermare]</p><p>La stessa terra, lo stesso rispetto — raccontati con un linguaggio nuovo.</p></div>
+  </div>
+</section>
+
+<div class="end-note">— Fine anteprima Hero · le sezioni successive seguiranno la stessa direzione —</div>
+<div class="demo-tag">Demo Hero · motore frame-sequence · Castaldo Tuccillo</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.14/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $ = s => document.querySelector(s);
+  const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mobile = matchMedia('(max-width: 768px)').matches;
+  const M = window.Motion || null;               // Motion One (graceful if absent)
+  const animate = M ? M.animate : null;
+  const inView  = M ? M.inView  : null;
+
+  // preloader
+  addEventListener('load',()=> setTimeout(()=>$('#preloader').classList.add('done'),600));
+
+  /* ---------------- FRAME SEQUENCE CONFIG ----------------
+     Drop the real render here. Two variants: desktop / mobile.
+     Files expected as: frames/glass_0000.webp ... (see asset spec). */
+  const SEQ = mobile
+    ? { count:90,  path:i=>`frames/mobile/glass_${String(i).padStart(4,'0')}.webp` }
+    : { count:120, path:i=>`frames/desktop/glass_${String(i).padStart(4,'0')}.webp` };
+
+  const canvas = $('#frames');
+  const ctx = canvas.getContext('2d');
+  let dpr = Math.min(devicePixelRatio||1, 2);
+  const images = new Array(SEQ.count).fill(null);
+  let loaded = 0, placeholderMode = false, currentFrame = 0;
+
+  function resize(){
+    dpr = Math.min(devicePixelRatio||1, 2);
+    canvas.width = Math.round(innerWidth*dpr);
+    canvas.height= Math.round(innerHeight*dpr);
+    render(currentFrame, lastP);
+  }
+  addEventListener('resize', resize);
+
+  function drawCover(img){
+    const cw=canvas.width, ch=canvas.height;
+    const ir=img.width/img.height, cr=cw/ch;
+    let w,h; if(ir>cr){h=ch; w=ch*ir;} else {w=cw; h=cw/ir;}
+    ctx.clearRect(0,0,cw,ch);
+    ctx.drawImage(img,(cw-w)/2,(ch-h)/2,w,h);
+  }
+
+  // Technical placeholder frame (NOT a fake glass): studio light pool + counter.
+  function drawPlaceholder(p){
+    const cw=canvas.width, ch=canvas.height;
+    ctx.clearRect(0,0,cw,ch);
+    // base
+    ctx.fillStyle='#080405'; ctx.fillRect(0,0,cw,ch);
+    // studio key light, shifts subtly with scroll to hint the pour direction
+    const lx = cw*(0.5 + (p-0.4)*0.12);
+    const ly = ch*0.40;
+    const g = ctx.createRadialGradient(lx,ly,10, lx,ly, Math.max(cw,ch)*0.6);
+    g.addColorStop(0, `rgba(60,26,32,${0.55+0.25*p})`);
+    g.addColorStop(0.4,'rgba(24,10,16,0.5)');
+    g.addColorStop(1,'rgba(6,3,5,0)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,cw,ch);
+    // floor light pool
+    const fg=ctx.createRadialGradient(cw*0.5,ch*0.72,4, cw*0.5,ch*0.72, cw*0.28);
+    fg.addColorStop(0,'rgba(168,138,86,0.10)'); fg.addColorStop(1,'rgba(168,138,86,0)');
+    ctx.fillStyle=fg; ctx.fillRect(0,0,cw,ch);
+    // pour hint: bordeaux glow growing from top as p increases
+    if(p>0.45){
+      const t=(p-0.45)/0.35;
+      const pg=ctx.createLinearGradient(0,0,0,ch*0.5*t);
+      pg.addColorStop(0,`rgba(90,17,34,${0.5*t})`); pg.addColorStop(1,'rgba(90,17,34,0)');
+      ctx.fillStyle=pg; ctx.fillRect(0,0,cw,ch*0.5*t);
+    }
+  }
+
+  let lastP = 0;
+  function render(frame, p){
+    if(!placeholderMode && images[frame] && images[frame].complete && images[frame].naturalWidth){
+      drawCover(images[frame]);
+    } else {
+      drawPlaceholder(p);
+    }
+  }
+
+  // ---- Preload (progressive). If frame 0 fails → placeholder mode. ----
+  function preload(){
+    const probe = new Image();
+    probe.onload = ()=>{ images[0]=probe; loaded=1; $('#assetSlot').style.display='none'; loadRest(); };
+    probe.onerror= ()=>{ placeholderMode=true; render(0, lastP); onScroll(); };
+    probe.src = SEQ.path(0);
+  }
+  function loadRest(){
+    for(let i=1;i<SEQ.count;i++){
+      const im=new Image();
+      im.onload=()=>{ loaded++; $('#preBar').style.width=(loaded/SEQ.count*100)+'%';
+        $('#frameCount').textContent='frame '+String(loaded).padStart(3,'0')+' / '+SEQ.count; };
+      im.src=SEQ.path(i); images[i]=im;
+    }
+  }
+
+  // ---------------- Scroll progress → frame + overlays ----------------
+  const scroller = $('#heroScroll');
+  function progress(){
+    const total = scroller.offsetHeight - innerHeight;
+    return clamp((-scroller.getBoundingClientRect().top)/total, 0, 1);
+  }
+  // opacity helper mapped on a [a,b] window
+  const seg=(p,a,b)=> clamp((p-a)/(b-a),0,1);
+
+  function onScroll(){
+    const p = lastP = progress();
+    // frames scrub across 0 → 0.80
+    const fp = seg(p,0,0.80);
+    currentFrame = Math.round(fp*(SEQ.count-1));
+    render(currentFrame, p);
+    // header
+    $('#hdr').classList.toggle('solid', (scrollY||document.documentElement.scrollTop)>60);
+    // overlays via progress (works with or without Motion)
+    const logoO = 1-seg(p,0.05,0.18);
+    const copyO = 1-seg(p,0.14,0.30);
+    const hintO = 1-seg(p,0.02,0.10);
+    $('#heroLogo').style.opacity=logoO; $('#heroLogo').style.transform=`translateY(${-20*seg(p,0.05,0.2)}px)`;
+    $('#heroCopy').style.opacity=copyO; $('#heroCopy').style.transform=`translateY(${30*seg(p,0.14,0.3)}px)`;
+    $('#hint').style.opacity=hintO;
+    $('#assetSlot').style.opacity = placeholderMode ? (1-seg(p,0.7,0.9)) : 0;
+    // liquid transition 0.80 → 1.0
+    const flood = seg(p,0.80,1.0);
+    const floodEl = $('#flood');
+    floodEl.style.display = flood>0 ? 'block' : 'none';
+    floodEl.style.height = (flood*118)+'vh';
+    $('#reveal').style.opacity = seg(p,0.86,1.0);
+  }
+
+  // ---------------- Init ----------------
+  function init(){
+    resize(); preload();
+    if(reduce){                      // static, readable fallback
+      scroller.style.height='100vh';
+      $('#hint').style.display='none'; $('#flood').style.display='none'; $('#reveal').style.display='none';
+      $('#hdr').classList.add('solid'); render(0,0); return;
+    }
+    // Motion-driven entrance (graceful fallback if Motion missing)
+    if(animate){
+      animate('#heroLogo',{opacity:[0,1],transform:['translateY(-16px)','translateY(0px)']},{duration:1.2,delay:1.1,easing:'ease-out'});
+      animate('#heroCopy',{opacity:[0,1],transform:['translateY(24px)','translateY(0px)']},{duration:1.2,delay:1.3,easing:'ease-out'});
+      animate('#hint',{opacity:[0,1]},{duration:1,delay:1.6});
+    }
+    // Cinque Generazioni reveals via Motion inView (fallback: just show)
+    document.querySelectorAll('[data-rise]').forEach(el=>{
+      if(inView){
+        el.style.opacity=0; el.style.transform='translateY(40px)';
+        inView(el,()=>{ animate(el,{opacity:[0,1],transform:['translateY(40px)','translateY(0)']},{duration:1,easing:'ease-out'}); }, {margin:'-18% 0px'});
+      }
+    });
+
+    // Lenis smooth scroll (graceful if CDN missing)
+    if(window.Lenis){
+      const lenis=new Lenis({lerp:.1, wheelMultiplier:.9});
+      function raf(t){ lenis.raf(t); requestAnimationFrame(raf); } requestAnimationFrame(raf);
+      lenis.on('scroll', onScroll);
+    }
+    addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }
+  init();
+})();
+</script>
+</body>
+</html>
