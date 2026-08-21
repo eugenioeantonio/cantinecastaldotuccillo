@@ -92,7 +92,7 @@ export function Wines() {
       <Reveal soft className="mx-auto mt-[8vh] max-w-2xl text-center">
         <p className="text-sm font-light leading-relaxed text-ivory/50">
           Ogni etichetta è disponibile in cantina e su prenotazione.{" "}
-          <a href="#esperienze" className="border-b border-gold/40 text-gold hover:border-gold">
+          <a href="#contatti" className="border-b border-gold/40 text-gold hover:border-gold">
             Scrivici per acquistare
           </a>
           .

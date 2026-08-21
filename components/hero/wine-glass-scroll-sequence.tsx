@@ -34,8 +34,6 @@ export function WineGlassScrollSequence() {
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  const logoOpacity = useTransform(scrollYProgress, [0.05, 0.18], [1, 0]);
-  const logoY = useTransform(scrollYProgress, [0.05, 0.2], [0, -20]);
   const copyOpacity = useTransform(scrollYProgress, [0.14, 0.3], [1, 0]);
   const copyY = useTransform(scrollYProgress, [0.14, 0.3], [0, 30]);
   const hintOpacity = useTransform(scrollYProgress, [0.02, 0.1], [1, 0]);
@@ -73,24 +71,8 @@ export function WineGlassScrollSequence() {
         {/* Legibility scrim */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_35%,transparent_35%,rgba(6,3,6,0.55)_100%)]" />
 
-        {/* Wordmark — unchanged */}
-        <motion.div
-          style={{ opacity: reduced ? 1 : logoOpacity, y: reduced ? 0 : logoY }}
-          className="absolute inset-x-0 top-[15vh] z-[8] text-center"
-        >
-          <motion.div
-            initial={reduced ? false : { opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 1.1, ease: easeSilk }}
-          >
-            <div className="font-serif text-[clamp(16px,2vw,20px)] tracking-[0.5em] [text-indent:0.5em]">
-              CASTALDO&nbsp;TUCCILLO
-            </div>
-            <div className="mt-2 text-[9px] tracking-[0.46em] text-stone">
-              CINQUE GENERAZIONI · SAN GENNARO VESUVIANO
-            </div>
-          </motion.div>
-        </motion.div>
+        {/* Upper area intentionally left clear: the glass is the only subject.
+            Branding lives once, in the header logo. */}
 
         {/* Copy + CTA — unchanged */}
         <motion.div
@@ -102,27 +84,30 @@ export function WineGlassScrollSequence() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 1.3, ease: easeSilk }}
           >
-            <div className="eyebrow mb-5">{brand.tagline}</div>
             <h1 className="font-serif text-[clamp(38px,7vw,86px)] font-medium leading-[1.02]">
               Il tempo <em className="italic text-stone">diventa</em> vino.
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-[clamp(13px,1.4vw,16px)] font-light tracking-[0.05em] text-ivory/70">
               {brand.place}, una storia iniziata cinque generazioni fa.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <a
-                href="#cantina"
-                className="group relative overflow-hidden rounded-full bg-ivory px-8 py-4 text-xs uppercase tracking-[0.18em] text-wine-dark transition-[transform,box-shadow] duration-500 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(168,138,86,0.5)]"
-              >
-                <span className="relative z-10">Scopri la nostra storia</span>
-                <span className="pointer-events-none absolute inset-y-0 -left-full w-1/2 skew-x-[-18deg] bg-gradient-to-r from-transparent via-white/40 to-transparent transition-[left] duration-700 group-hover:left-[130%]" />
-              </a>
-              <a
+            <div className="mt-8 flex justify-center">
+              {/* Frosted-glass CTA: a small pane of satin glass over the wine */}
+              <motion.a
                 href="#vini"
-                className="rounded-full border border-ivory/40 px-8 py-4 text-xs uppercase tracking-[0.18em] text-ivory transition-[transform,color,border-color] duration-500 hover:-translate-y-0.5 hover:border-gold hover:text-gold"
+                whileHover={reduced ? undefined : { scale: 1.02 }}
+                whileTap={reduced ? undefined : { scale: 0.985 }}
+                transition={{ duration: 0.4, ease: easeSilk }}
+                className="group relative overflow-hidden rounded-full border border-ivory/30 bg-ivory/[0.12] px-8 py-4 text-xs uppercase tracking-[0.18em] text-ivory shadow-[0_10px_36px_-14px_rgba(0,0,0,0.75)] backdrop-blur-md backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-500 hover:border-ivory/55 hover:bg-ivory/20 hover:shadow-[0_12px_40px_-14px_rgba(0,0,0,0.8)] active:bg-ivory/25"
               >
-                Esplora i vini
-              </a>
+                <span className="relative z-10 [text-shadow:0_1px_6px_rgba(0,0,0,0.45)]">
+                  Esplora i vini
+                </span>
+                {/* soft sheen along the upper edge */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-b from-white/25 via-white/[0.04] to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100"
+                />
+              </motion.a>
             </div>
           </motion.div>
         </motion.div>
@@ -136,7 +121,23 @@ export function WineGlassScrollSequence() {
             <span className="text-[10px] uppercase tracking-[0.3em] text-ivory/60">
               Scorri per entrare nella nostra storia
             </span>
-            <span className="mx-auto mt-3 block h-4 w-4 rotate-45 border-b border-r border-gold [animation:bob_2s_ease-in-out_infinite]" />
+            {/* A hairline chevron that unmistakably points down */}
+            <motion.span
+              aria-hidden
+              className="mx-auto mt-3 block w-fit text-gold"
+              animate={{ y: [0, 5, 0], opacity: [0.45, 1, 0.45] }}
+              transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
+            >
+              <svg width="20" height="11" viewBox="0 0 20 11" fill="none">
+                <path
+                  d="M1 1.2 L10 9.4 L19 1.2"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </motion.span>
           </motion.div>
         )}
 

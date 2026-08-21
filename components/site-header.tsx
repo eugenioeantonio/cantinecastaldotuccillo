@@ -1,9 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { brand, nav, contact } from "@/lib/content";
 import { easeSilk } from "@/lib/motion";
+
+/** Intrinsic size of the official logo asset (public/brand/logo.png). */
+const LOGO = { width: 370, height: 384 } as const;
 
 export function SiteHeader() {
   const [solid, setSolid] = useState(false);
@@ -66,13 +70,23 @@ export function SiteHeader() {
             : "border-b border-transparent py-5"
         }`}
       >
-        <a href="#top" aria-label={`${brand.full} — home`} className="leading-none">
-          <span className="block font-serif text-base font-semibold tracking-[0.34em] text-ivory">
-            CASTALDO TUCCILLO
-          </span>
-          <span className="mt-1 block font-sans text-[9px] font-light tracking-[0.5em] text-stone">
-            CANTINE · DAL VESUVIO
-          </span>
+        <a
+          href="#top"
+          aria-label={`${brand.full} — home`}
+          className="flex items-center leading-none"
+        >
+          {/* Official brand mark — original asset, proportions untouched */}
+          <Image
+            src="/brand/logo.png"
+            alt=""
+            width={LOGO.width}
+            height={LOGO.height}
+            priority
+            sizes="(max-width: 767px) 56px, 72px"
+            className={`w-auto transition-[height] duration-500 ${
+              solid ? "h-12 md:h-[60px]" : "h-14 md:h-[72px]"
+            }`}
+          />
         </a>
 
         <nav aria-label="Navigazione principale" className="flex items-center gap-8">

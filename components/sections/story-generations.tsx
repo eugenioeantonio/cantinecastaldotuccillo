@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { generations } from "@/lib/content";
 import { Reveal } from "@/components/primitives/reveal";
-import { SplitText } from "@/components/primitives/split-text";
 import { easeSilk } from "@/lib/motion";
 
 export function StoryGenerations() {
@@ -80,8 +79,7 @@ export function StoryGenerations() {
                   <h3 className="mt-4 font-serif text-[clamp(26px,3vw,40px)] font-medium text-ivory">
                     {g.title}
                   </h3>
-                  <p className="mt-1 text-sm italic text-stone/70">{g.people}</p>
-                  <p className="mt-3 max-w-md text-[15px] font-light leading-[1.75] text-ivory/60 md:inline-block">
+                  <p className="mt-4 max-w-md text-[15px] font-light leading-[1.75] text-ivory/60 md:inline-block">
                     {g.body}
                   </p>
                 </Reveal>
@@ -90,15 +88,6 @@ export function StoryGenerations() {
           })}
         </div>
       </div>
-
-      {/* Bridge line into the wines */}
-      <Reveal soft className="mx-auto mt-[14vh] max-w-2xl text-center">
-        <div className="hairline mx-auto mb-8 w-32" />
-        <p className="font-serif text-[clamp(22px,3vw,38px)] font-light leading-tight text-ivory">
-          <SplitText text="E oggi quella stessa terra" /> <br className="hidden sm:block" />
-          <SplitText text="si racconta in un calice." className="italic text-stone" delay={0.3} />
-        </p>
-      </Reveal>
     </section>
   );
 }

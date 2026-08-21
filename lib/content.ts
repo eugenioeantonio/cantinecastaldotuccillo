@@ -31,7 +31,7 @@ export const nav = [
   { label: "La Cantina", href: "#cantina" },
   { label: "Vini", href: "#vini" },
   { label: "Metodo Vesuviano", href: "#metodo" },
-  { label: "Esperienze", href: "#esperienze" },
+  { label: "Esperienze", href: "#contatti" },
 ] as const;
 
 export type Generation = {

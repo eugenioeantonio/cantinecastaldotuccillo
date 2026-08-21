@@ -5,7 +5,6 @@ import { WineGlassScrollSequence } from "@/components/hero/wine-glass-scroll-seq
 import { StoryGenerations } from "@/components/sections/story-generations";
 import { Wines } from "@/components/sections/wines";
 import { Method } from "@/components/sections/method";
-import { Experience } from "@/components/sections/experience";
 import { ContactCta } from "@/components/sections/contact-cta";
 import { SiteFooter } from "@/components/sections/site-footer";
 
@@ -20,7 +19,6 @@ export default function Home() {
         <StoryGenerations />
         <Wines />
         <Method />
-        <Experience />
         <ContactCta />
       </main>
       <SiteFooter />

@@ -1,7 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { brand, contact, nav } from "@/lib/content";
-import { Reveal } from "@/components/primitives/reveal";
+
+/** Intrinsic size of the STEPS credit mark (public/brand/steps.png, trimmed). */
+const STEPS = { width: 418, height: 96 } as const;
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -48,9 +51,6 @@ export function SiteFooter() {
                   {contact.email}
                 </a>
               </li>
-              <li>
-                {contact.city} ({contact.region})
-              </li>
             </ul>
           </div>
           <div>
@@ -67,18 +67,20 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Giant wordmark */}
-      <Reveal className="mx-auto mt-14 max-w-7xl">
-        <div className="select-none bg-gradient-to-b from-ivory/12 to-ivory/0 bg-clip-text text-center font-serif text-[clamp(56px,16vw,240px)] font-medium leading-[0.9] tracking-tight text-transparent">
-          {brand.name}
-        </div>
-      </Reveal>
-
       <div className="mx-auto mt-8 flex max-w-6xl flex-col items-center justify-between gap-4 text-[11px] uppercase tracking-[0.16em] text-ivory/35 sm:flex-row">
         <span>
           © {year} {brand.full}
         </span>
-        <span>{brand.claim}</span>
+        <span className="flex items-center gap-2 whitespace-nowrap">
+          Power by
+          <Image
+            src="/brand/steps.png"
+            alt="STEPS"
+            width={STEPS.width}
+            height={STEPS.height}
+            className="h-[11px] w-auto opacity-60 sm:h-[13px]"
+          />
+        </span>
       </div>
     </footer>
   );

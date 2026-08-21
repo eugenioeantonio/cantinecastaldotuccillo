@@ -1,6 +1,6 @@
 "use client";
 
-import { contact, brand } from "@/lib/content";
+import { contact } from "@/lib/content";
 import { Reveal } from "@/components/primitives/reveal";
 import { SplitText } from "@/components/primitives/split-text";
 
@@ -11,11 +11,8 @@ export function ContactCta() {
       className="relative overflow-hidden bg-gradient-to-b from-ink via-wine-dark to-[#1a0710] px-6 py-[18vh] sm:px-[clamp(24px,7vw,120px)]"
     >
       <div className="mx-auto max-w-4xl text-center">
-        <Reveal soft>
-          <div className="eyebrow mb-8">Un calice ci aspetta</div>
-        </Reveal>
         <h2 className="font-serif text-[clamp(40px,7vw,92px)] font-medium leading-[1.02] text-ivory">
-          <SplitText text={brand.claim} by="word" />
+          <SplitText text="Un calice ti aspetta" by="word" />
         </h2>
         <Reveal soft delay={0.2}>
           <p className="mx-auto mt-8 max-w-xl text-[clamp(14px,1.5vw,17px)] font-light leading-relaxed text-ivory/65 text-balance">
@@ -55,9 +52,13 @@ export function ContactCta() {
             </div>
             <div>
               <div className="eyebrow eyebrow-stone mb-3 !text-[10px]">Orari</div>
+              {/* The days are stated once, then the two daily windows. */}
+              <p className="text-[15px] font-light leading-relaxed text-ivory/75">
+                {contact.hours[0].days}
+              </p>
               {contact.hours.map((h, i) => (
                 <p key={i} className="text-[15px] font-light leading-relaxed text-ivory/75">
-                  {h.days} · {h.time}
+                  {h.time}
                 </p>
               ))}
             </div>
