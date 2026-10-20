@@ -18,6 +18,14 @@ export type SequenceVariant = {
   windowRadiusLow: number;
 };
 
+/**
+ * Which hero runs. "pour" = the live WebGL2 scene built on the original
+ * photograph (components/hero/pour). "sequence" = the original pre-rendered
+ * frame sequence below — kept intact, and used automatically as fallback.
+ * Set to "sequence" for an instant rollback.
+ */
+export const HERO_RENDERER: "pour" | "sequence" = "pour";
+
 export const SEQUENCE = {
   /** Public base path for the frames. */
   basePath: "/sequences/wine-glass",

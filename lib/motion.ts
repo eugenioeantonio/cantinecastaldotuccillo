@@ -59,5 +59,19 @@ export const lineReveal: Variants = {
   },
 };
 
+/**
+ * Clamped linear map for scroll-linked values, passed to useTransform as a
+ * function. Motion hands the array form (`useTransform(p, [a, b], [c, d])`)
+ * of a targeted useScroll to the browser's native ViewTimeline, which
+ * mis-maps tall sticky sections (copy reappearing late in the hero). The
+ * function form keeps the value on Motion's JS scroll measurement.
+ */
+export const scrollMap =
+  ([inA, inB]: readonly [number, number], [outA, outB]: readonly [number, number]) =>
+  (v: number) => {
+    const t = Math.min(1, Math.max(0, (v - inA) / (inB - inA)));
+    return outA + (outB - outA) * t;
+  };
+
 /** Standard viewport trigger used with whileInView. */
 export const inViewOnce = { once: true, margin: "-12% 0px -12% 0px" } as const;

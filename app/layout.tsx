@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { CartProvider } from "@/components/commerce/cart";
+import { commerceStatus } from "@/lib/commerce";
 import { seo, brand, contact } from "@/lib/content";
 
 const cormorant = Cormorant_Garamond({
@@ -97,7 +99,16 @@ export default function RootLayout({
         >
           Vai al contenuto
         </a>
-        <SmoothScroll>{children}</SmoothScroll>
+        {/* the cart exists only when the Shopify store is connected */}
+        <CartProvider enabled={commerceStatus().mode === "buy"}>
+          <SmoothScroll>{children}</SmoothScroll>
+        </CartProvider>
+        {/* development without a store: the wines shown are not the store's */}
+        {commerceStatus().demo && (
+          <p className="pointer-events-none fixed bottom-4 right-4 z-[160] rounded-full border border-gold/40 bg-ink/85 px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-gold backdrop-blur">
+            Dati dimostrativi · Shopify non collegato
+          </p>
+        )}
       </body>
     </html>
   );

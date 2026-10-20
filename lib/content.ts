@@ -27,12 +27,21 @@ export const contact = {
   ],
 } as const;
 
+/**
+ * "#…" is a scene of the homepage; "/…" is a page of its own.
+ * Resolve with `navHref` so anchors work from every page.
+ */
 export const nav = [
   { label: "La Cantina", href: "#cantina" },
-  { label: "Vini", href: "#vini" },
-  { label: "Metodo Vesuviano", href: "#metodo" },
-  { label: "Esperienze", href: "#contatti" },
+  { label: "Il Metodo", href: "/metodo" },
+  { label: "Vini", href: "/vini" },
+  { label: "La visita", href: "/visita" },
 ] as const;
+
+export const isPageHref = (href: string) => href.startsWith("/");
+
+/** `base` is "" on the homepage and "/" elsewhere; pages ignore it. */
+export const navHref = (href: string, base: string) => (isPageHref(href) ? href : `${base}${href}`);
 
 export type Generation = {
   index: string;
@@ -81,6 +90,8 @@ export const generations: Generation[] = [
 ];
 
 export type Wine = {
+  /** URL handle — the same handle the Shopify product will use. */
+  handle: string;
   name: string;
   kind: string;
   grape: string;
@@ -90,6 +101,7 @@ export type Wine = {
 
 export const wines: Wine[] = [
   {
+    handle: "falanghina",
     name: "Falanghina",
     kind: "Bianco · Campania IGP",
     grape: "Falanghina",
@@ -97,6 +109,7 @@ export const wines: Wine[] = [
     accent: "#d9c98f",
   },
   {
+    handle: "aglianico",
     name: "Aglianico",
     kind: "Rosso · Campania IGP",
     grape: "Aglianico",
@@ -104,6 +117,7 @@ export const wines: Wine[] = [
     accent: "#7a1526",
   },
   {
+    handle: "metodo-vesuviano",
     name: "Metodo Vesuviano",
     kind: "Spumante · Metodo tradizionale",
     grape: "Uve vesuviane",
@@ -111,6 +125,7 @@ export const wines: Wine[] = [
     accent: "#c6ab7d",
   },
   {
+    handle: "lammiccato",
     name: "Lammiccato",
     kind: "Raro · Tradizione di famiglia",
     grape: "Selezione storica",
@@ -118,6 +133,16 @@ export const wines: Wine[] = [
     accent: "#4a0f1b",
   },
 ];
+
+/**
+ * Territory microdata. Coordinates and summit height are public
+ * geography — to verify with the family before launch.
+ */
+export const territory = {
+  place: "San Gennaro Vesuviano (NA)",
+  coordinates: "40°52′ N · 14°32′ E",
+  summit: "Vesuvio · 1.281 m",
+} as const;
 
 export const method = {
   eyebrow: "Il gesto",

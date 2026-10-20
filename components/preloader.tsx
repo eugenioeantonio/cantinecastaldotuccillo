@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { easeSilk } from "@/lib/motion";
-import { SEQUENCE, posterPath } from "@/components/hero/sequence-config";
+import { HERO_RENDERER, SEQUENCE, posterPath } from "@/components/hero/sequence-config";
+import { pourAssets } from "@/components/hero/pour/renderer";
 
 /** Official brand mark (intrinsic size of public/brand/logo.png). */
 const LOGO = { src: "/brand/logo.png", width: 370, height: 384 } as const;
@@ -53,9 +54,12 @@ export function Preloader() {
       }, remaining);
     };
 
-    Promise.all([fonts, image(LOGO.src), image(posterPath(variant))]).then(
-      finish,
-    );
+    // The live hero needs its three photographic layers; the fallback its poster.
+    const heroAssets =
+      HERO_RENDERER === "pour"
+        ? pourAssets(variant.dir).map(image)
+        : [image(posterPath(variant))];
+    Promise.all([fonts, image(LOGO.src), ...heroAssets]).then(finish);
     const safety = window.setTimeout(finish, MAX_WAIT_MS);
 
     // Hold the page still while the curtain is up.

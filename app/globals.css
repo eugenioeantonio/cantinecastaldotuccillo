@@ -192,6 +192,113 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Volcanic stone: embossed fractal noise over near-black, built in the
+     browser (no texture file). */
+  .lava {
+    background-color: #0a0608;
+    background-image:
+      radial-gradient(120% 70% at 70% 0%, rgba(74, 15, 27, 0.3), transparent 60%),
+      linear-gradient(180deg, #120a10 0%, transparent 18%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='l'><feTurbulence type='fractalNoise' baseFrequency='0.018 0.022' numOctaves='5' seed='7'/><feDiffuseLighting lighting-color='%23a39aa0' surfaceScale='2.4' diffuseConstant='0.7'><feDistantLight azimuth='225' elevation='38'/></feDiffuseLighting></filter><rect width='100%25' height='100%25' filter='url(%23l)' opacity='0.09'/></svg>");
+  }
+
+  /* A photograph's place, held by the same stone until the photo exists. */
+  .plate {
+    background-color: #120a0e;
+  }
+  .plate-material {
+    background-image:
+      linear-gradient(160deg, rgba(243, 239, 230, 0.04), transparent 45%),
+      radial-gradient(90% 70% at 30% 20%, rgba(74, 15, 27, 0.28), transparent 70%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.035' numOctaves='4' seed='3'/><feDiffuseLighting lighting-color='%23d4c7b5' surfaceScale='1.6'><feDistantLight azimuth='235' elevation='45'/></feDiffuseLighting></filter><rect width='100%25' height='100%25' filter='url(%23p)' opacity='0.08'/></svg>");
+    box-shadow: inset 0 0 0 1px rgba(168, 138, 86, 0.12);
+  }
+
+  /* The wine field's canvas sits over its CSS backdrop only once live. */
+  .wine-field {
+    opacity: 0;
+    transition: opacity 1.2s var(--ease-silk);
+  }
+  .wine-field[data-live="true"] {
+    opacity: 1;
+  }
+}
+
+/* The wine's light after the pour (components/atmosphere/wine-light.tsx).
+   Faded at both ends so it never stops at a section's edge. */
+.wine-light {
+  mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 78%, transparent 100%);
+}
+.wine-light-glow {
+  position: absolute;
+  top: 8%;
+  width: 70vmax;
+  height: 70vmax;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(122, 21, 38, 0.2), rgba(74, 15, 27, 0.08) 55%, transparent 75%);
+  filter: blur(10px);
+  animation: wine-drift 26s ease-in-out infinite alternate;
+}
+.wine-light[data-side="right"] .wine-light-glow { right: -28vmax; }
+.wine-light[data-side="left"] .wine-light-glow { left: -28vmax; }
+.wine-light-shafts {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    101deg,
+    transparent 0 11vw,
+    rgba(122, 21, 38, 0.05) 11vw calc(11vw + 1px),
+    transparent calc(11vw + 1px) 23vw
+  );
+  mask-image: linear-gradient(180deg, transparent, #000 30%, #000 60%, transparent);
+}
+@keyframes wine-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-6vmax, 10vmax, 0) scale(1.12); }
+}
+
+/* The Lammiccato scene holds the screen alone: the header steps aside. */
+.site-header {
+  transition-property: background, padding, border-color, opacity, visibility;
+}
+html[data-scene="lammiccato"] .site-header {
+  opacity: 0 !important;
+  visibility: hidden;
+}
+
+/* Browser surfaces in the palette */
+html {
+  scrollbar-color: rgba(168, 138, 86, 0.35) #08040a;
+  caret-color: var(--gold);
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #08040a;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 138, 86, 0.3);
+  border: 3px solid #08040a;
+  border-radius: 10px;
+}
+
+/* A horizontal rail of items (the wines on a phone): a hairline track */
+.rail {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 138, 86, 0.35) transparent;
+}
+.rail::-webkit-scrollbar {
+  height: 3px;
+}
+.rail::-webkit-scrollbar-track {
+  background: rgba(168, 138, 86, 0.08);
+}
+.rail::-webkit-scrollbar-thumb {
+  background: rgba(168, 138, 86, 0.45);
+  border: 0;
+  border-radius: 0;
 }
 
 @keyframes bob {
